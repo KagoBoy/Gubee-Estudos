@@ -96,5 +96,14 @@ public class Pessoa {
                 + ", role2=" + role2 + ", peakElo=" + peakElo + ", idade=" + idade + "]";
     }
 
+    public String toString_2(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Nome: " + nome + "\n");
+        sb.append("Nick: " + nickName + "\n");
+        sb.append("PeakElo: " + peakElo + "\n");
+        sb.append("Idade: " + idade);
+        return sb.toString();
+    }
+
 
 }

@@ -22,6 +22,8 @@ public class App {
 
         c.buscaAllPlayers();
 
+        System.out.println(c.buscaPlayerNick("dr yam #drs").toString_2());
+
         
     }
 }
