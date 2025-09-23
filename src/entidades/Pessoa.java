@@ -1,7 +1,9 @@
-package metodos;
+package entidades;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import entidades_enum.Elo;
 
 public class Pessoa {
     private String nome;
@@ -9,7 +11,7 @@ public class Pessoa {
     private String nickName;
     private String role1;
     private String role2;
-    private String peakElo;
+    private Elo peakElo;
     private int idade;
     private DateTimeFormatter frmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     
@@ -20,7 +22,7 @@ public class Pessoa {
     }
 
     
-    public Pessoa(String nome, LocalDate dataNasc, String nickName, String role1, String role2, String peakElo, int idade) {
+    public Pessoa(String nome, LocalDate dataNasc, String nickName, String role1, String role2, Elo peakElo, int idade) {
         this.nome = nome;
         this.dataNasc = dataNasc;
         this.nickName = nickName;
@@ -79,10 +81,10 @@ public class Pessoa {
     }
 
 
-    public String getPeakElo() {
+    public Elo getPeakElo() {
         return peakElo;
     }
-    public void setPeakElo(String peakElo) {
+    public void setPeakElo(Elo peakElo) {
         this.peakElo = peakElo;
     }
 

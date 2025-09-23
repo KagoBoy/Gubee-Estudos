@@ -1,9 +1,12 @@
-package metodos;
+package services;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 // import java.util.Optional;
+
+import entidades.Pessoa;
+import entidades_enum.Elo;
 
 public class Cadastro {
 
@@ -15,7 +18,7 @@ public class Cadastro {
     private int idade;
     
     //Adicionar player
-    public void adicionarPlayer(String nome, String dataNasc, String nickName, String role1, String role2, String peakElo){
+    public void adicionarPlayer(String nome, String dataNasc, String nickName, String role1, String role2, Elo peakElo){
         dataFormatada = LocalDate.parse(dataNasc, frmt);
         idade = dataAtual.getYear() - dataFormatada.getYear();
         p = new Pessoa(nome, dataFormatada, nickName, role1, role2, peakElo, idade);
@@ -58,7 +61,7 @@ public class Cadastro {
 
 
     //Metodos de atualizar players
-    public Pessoa atualizaPlayer (int indice, String nome, String dataNasc, String nickName, String role1, String role2, String peakElo){
+    public Pessoa atualizaPlayer (int indice, String nome, String dataNasc, String nickName, String role1, String role2, Elo peakElo){
         dataFormatada = LocalDate.parse(dataNasc, frmt);
         idade = dataAtual.getYear() - dataFormatada.getYear();
         p = new Pessoa(nome, dataFormatada, nickName, role1, role2, peakElo, idade);
@@ -71,7 +74,7 @@ public class Cadastro {
         return pe;
     }
 
-    public Pessoa atualizaPlayerPorNome (String nome, String newNome, String dataNasc, String nickName, String role1, String role2, String peakElo){
+    public Pessoa atualizaPlayerPorNome (String nome, String newNome, String dataNasc, String nickName, String role1, String role2, Elo peakElo){
         dataFormatada = LocalDate.parse(dataNasc, frmt);
         idade = dataAtual.getYear() - dataFormatada.getYear();
         p = new Pessoa(newNome, dataFormatada, nickName, role1, role2, peakElo, idade);
@@ -84,7 +87,7 @@ public class Cadastro {
         return null;
     }
 
-    public Pessoa atualizaPlayerPorNick (String nick, String nome, String dataNasc, String newNick, String role1, String role2, String peakElo){
+    public Pessoa atualizaPlayerPorNick (String nick, String nome, String dataNasc, String newNick, String role1, String role2, Elo peakElo){
         dataFormatada = LocalDate.parse(dataNasc, frmt);
         idade = dataAtual.getYear() - dataFormatada.getYear();
         p = new Pessoa(nome, dataFormatada, newNick, role1, role2, peakElo, idade);
