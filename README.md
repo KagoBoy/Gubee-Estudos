@@ -1,1 +1,1 @@
-Repositória destinado a estudos da Gubee
+Repositório destinado a estudos da Gubee
