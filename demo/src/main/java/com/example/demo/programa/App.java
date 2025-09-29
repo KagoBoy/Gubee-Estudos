@@ -23,6 +23,8 @@ public class App {
         em.remove(p);
         em.getTransaction().commit();
 
+        //É necessário o getTransaction().begin() e o .commit() sempre que não seja apenas consulta
+
         // Pessoa p = em.find(Pessoa.class, 2); //busca a pessoa na tabela pelo id
         // System.out.println(p);
 
