@@ -1,7 +1,7 @@
 {
     "java.project.sourcePaths": [
-        "demo\\src",
-        "jpa\\src"
+        "demo/src",
+        "chess-system/src"
     ],
     "java.project.referencedLibraries": [
         "c:\\java-libs\\jdbc-connectors\\mysql-connector-j-9.4.0.jar"
