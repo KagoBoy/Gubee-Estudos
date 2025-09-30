@@ -8,7 +8,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -25,7 +27,10 @@ public class Product implements Serializable{
     private Double price;
     private String imgUrl;
     
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name = "tb_product_category", 
+    joinColumns = @JoinColumn(name = "product_id"),
+    inverseJoinColumns = @JoinColumn(name = "category_id")) //Da o nome para a tabela de referencia e o nome das colunas ID
     private Set<Category> categories = new HashSet<>();
     
     public Product() {
