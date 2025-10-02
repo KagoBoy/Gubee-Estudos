@@ -23,6 +23,10 @@ public class App {
         repository.buscarPorTitulo("dom").forEach(item -> 
             System.out.println("✓ " + service.descreverItem(item))
         );
+        repository.buscarPorId("L002").ifPresentOrElse(
+            item -> System.out.println("✓ " + service.descreverItem(item)),
+            () -> System.out.println("❌ Item não encontrado")
+        );
         
         System.out.println("\n=== REALIZANDO EMPRÉSTIMOS ===");
         service.realizarEmprestimo("L001", usuario, 14);
