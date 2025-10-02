@@ -1,6 +1,6 @@
 {
     "java.project.sourcePaths": [
-        "demo/src",
+        "biblioteca-moderna/src",
         "chess-system/src"
     ],
     "java.project.referencedLibraries": [
