@@ -1,11 +1,12 @@
 {
     "java.project.sourcePaths": [
         "biblioteca-moderna/src",
-        "chess-system/src"
+        "demo/src/java/main"
     ],
     "java.project.referencedLibraries": [
         "c:\\java-libs\\jdbc-connectors\\mysql-connector-j-9.4.0.jar"
     ],
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.format.settings.url": ".vscode/java-formatter.xml"
+    "java.format.settings.url": ".vscode/java-formatter.xml",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
