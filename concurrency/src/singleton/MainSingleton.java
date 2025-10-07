@@ -1,16 +1,34 @@
+package singleton;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class MainSingleton {
-    public static void main(String[] args) throws InterruptedException {
 
+    private static ExecutorService executor;
+    public static void main(String[] args) throws InterruptedException {
+        
+        executor = Executors.newFixedThreadPool(2);
         // cs = ClasseSingleton.getInstance(4);
-        Thread t1 = new Thread(new DemoThreadCont(), "Thread 1");
-        Thread t2 = new Thread(new DemoThreadCont(), "Thread 2");
-        t1.start();
-        t2.start();
-        t1.join();
-        t2.join();
-        ClasseSingleton cs = ClasseSingleton.getInstance();
-        System.out.println(cs);
+        try {
+            executor.submit(new DemoThreadCont());
+            executor.submit(new DemoThreadCont());
+        }finally{
+            //Para de aceitar novas tarefas
+            executor.shutdown();
+
+            //Espera até que todas as tarefas terminem
+            if(!executor.awaitTermination(30, TimeUnit.SECONDS)){
+                System.out.println("forçando shutdown");
+                executor.shutdownNow();
+            }
+            ClasseSingleton cs = ClasseSingleton.getInstance();
+            System.out.println(cs);
+        }
+        
+
+        
 
     }
 }
@@ -21,7 +39,7 @@ class DemoThreadCont implements Runnable {
         String threadName = Thread.currentThread().getName();
         for (int i = 0; i < 20; i++) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(700);
                 ClasseSingleton.getInstance().incrementar(i);
                 System.out.println(threadName + " incrementando");
             } catch (InterruptedException e) {
