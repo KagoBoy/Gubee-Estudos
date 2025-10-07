@@ -1,6 +1,6 @@
 {
     "java.project.sourcePaths": [
-        "biblioteca-moderna/src",
+        "db/src",
         "demo/src/java/main"
     ],
     "java.project.referencedLibraries": [

@@ -57,7 +57,7 @@ public class DepartmentDaoJDBC implements DepartmentDao{
         try{
             st = conn.prepareStatement(
                 "UPDATE department "
-                + "SET Name = ? WHERE Id = ?"
+                + "SET Name = ? WHERE iddepartment = ?"
             );
             st.setString(1, obj.getName());
             st.setInt(2, obj.getId());
@@ -75,7 +75,7 @@ public class DepartmentDaoJDBC implements DepartmentDao{
         PreparedStatement st = null;
         try {
             st = conn.prepareStatement(
-                "DELETE FROM department WHERE Id = ?"
+                "DELETE FROM department WHERE iddepartment = ?"
                 );
             st.setInt(1, id);
 
@@ -97,7 +97,7 @@ public class DepartmentDaoJDBC implements DepartmentDao{
         ResultSet rs = null;
         try {
             st = conn.prepareStatement(
-                "SELECT * FROM department WHERE Id = ?"
+                "SELECT * FROM department WHERE iddepartment = ?"
                 );
             st.setInt(1, id);
 
@@ -118,7 +118,7 @@ public class DepartmentDaoJDBC implements DepartmentDao{
 
     private Department instantiateDepartment(ResultSet rs) throws SQLException{
         Department dep = new Department();
-        dep.setId(rs.getInt("Id"));
+        dep.setId(rs.getInt("iddepartment"));
         dep.setName(rs.getString("Name"));
         return dep;
     }

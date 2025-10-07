@@ -6,9 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import dao.SellerDao;
 import db.DbException;
@@ -67,7 +67,7 @@ public class SellerDaoJDBC implements SellerDao {
             st = conn.prepareStatement(
                 "UPDATE seller "
                 + "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? "
-                + "WHERE Id = ?"
+                + "WHERE idseller = ?"
             );
             st.setString(1, obj.getName());
             st.setString(2, obj.getEmail());
@@ -89,7 +89,7 @@ public class SellerDaoJDBC implements SellerDao {
     public void deleteById(Integer id) {
         PreparedStatement st = null;
         try{
-            st = conn.prepareStatement("DELETE FROM seller WHERE Id = ?");
+            st = conn.prepareStatement("DELETE FROM seller WHERE idseller = ?");
             st.setInt(1, id);
             int rows = st.executeUpdate();
 
@@ -111,8 +111,8 @@ public class SellerDaoJDBC implements SellerDao {
             st = conn.prepareStatement(
                 "SELECT seller.*, department.Name as DepName "
                 + "FROM seller INNER JOIN department "
-                + "ON seller.DepartmentId = department.Id "
-                + "WHERE seller.Id = ?"
+                + "ON seller.DepartmentId = department.iddepartment "
+                + "WHERE seller.idseller = ?"
             );
             st.setInt(1, id);
             rs = st.executeQuery();
@@ -132,7 +132,7 @@ public class SellerDaoJDBC implements SellerDao {
 
     private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException{
         Seller obj = new Seller();
-        obj.setId(rs.getInt("Id"));
+        obj.setId(rs.getInt("idseller"));
         obj.setName(rs.getString("Name"));
         obj.setEmail(rs.getString("Email"));
         obj.setBaseSalary(rs.getDouble("BaseSalary"));
@@ -156,13 +156,13 @@ public class SellerDaoJDBC implements SellerDao {
             st = conn.prepareStatement(
                 "SELECT seller.*, department.Name as DepName "
                 + "FROM seller INNER JOIN department "
-                + "ON seller.DepartmentId = department.Id "
+                + "ON seller.DepartmentId = department.iddepartment "
                 + "ORDER BY Name"
             );
 
             rs = st.executeQuery();
             List<Seller> list = new ArrayList<>();
-            Map<Integer, Department> map = new HashMap<>();
+            Map<Integer, Department> map = new ConcurrentHashMap<>();
             while(rs.next()){
 
                 Department dep = map.get(rs.getInt("DepartmentId"));
@@ -191,14 +191,14 @@ public class SellerDaoJDBC implements SellerDao {
             st = conn.prepareStatement(
                 "SELECT seller.*, department.Name as DepName "
                 + "FROM seller INNER JOIN department "
-                + "ON seller.DepartmentId = department.Id "
+                + "ON seller.DepartmentId = department.iddepartment "
                 + "WHERE DepartmentId = ? "
                 + "ORDER BY Name"
             );
             st.setInt(1, department.getId());
             rs = st.executeQuery();
             List<Seller> list = new ArrayList<>();
-            Map<Integer, Department> map = new HashMap<>();
+            Map<Integer, Department> map = new ConcurrentHashMap<>();
             while(rs.next()){
 
                 Department dep = map.get(rs.getInt("DepartmentId"));

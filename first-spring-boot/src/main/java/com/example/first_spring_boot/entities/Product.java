@@ -1,8 +1,8 @@
 package com.example.first_spring_boot.entities;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_product")
-public class Product implements Serializable{
+public class Product implements Serializable, Comparable<Product>{
 
     private static final long serialVersionUID = 1L; 
     
@@ -34,10 +34,10 @@ public class Product implements Serializable{
     @JoinTable(name = "tb_product_category", 
     joinColumns = @JoinColumn(name = "product_id"),
     inverseJoinColumns = @JoinColumn(name = "category_id")) //Da o nome para a tabela de referencia e o nome das colunas ID
-    private Set<Category> categories = new HashSet<>();
+    private Set<Category> categories = new ConcurrentSkipListSet<>();
 
     @OneToMany(mappedBy = "id.product") //id.product porque na classe OrderItem tem o atibuto id do tipo OrderItemPK que dentro dele tem o objeto product
-    private Set<OrderItem> items = new HashSet<>();
+    private Set<OrderItem> items = new ConcurrentSkipListSet<>();
     
     public Product() {
     }
@@ -96,7 +96,7 @@ public class Product implements Serializable{
 
     @JsonIgnore
     public Set<Order> getOrders(){
-        Set<Order> set = new HashSet<>();
+        Set<Order> set = new ConcurrentSkipListSet<>();
         for (OrderItem x : items){
             set.add(x.getOrder());
         }
@@ -126,5 +126,13 @@ public class Product implements Serializable{
         } else if (!id.equals(other.id))
             return false;
         return true;
+    }
+
+    @Override
+    public int compareTo(Product o) {
+        if (this.id == null && o.id == null) return 0;
+        if (this.id == null) return -1;
+        if (o.id == null) return -1;
+        return this.id.compareTo(o.id);
     }
 }

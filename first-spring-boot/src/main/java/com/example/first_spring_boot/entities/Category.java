@@ -1,8 +1,8 @@
 package com.example.first_spring_boot.entities;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_category")
-public class Category implements Serializable{
+public class Category implements Serializable, Comparable<Category>{
 
     private static final long serialVersionUID = 1L;
     
@@ -26,7 +26,7 @@ public class Category implements Serializable{
 
     @JsonIgnore
     @ManyToMany(mappedBy = "categories")
-    private Set<Product> products = new HashSet<>();
+    private Set<Product> products = new ConcurrentSkipListSet<>();
     
     
     public Category() {
@@ -80,5 +80,13 @@ public class Category implements Serializable{
         } else if (!id.equals(other.id))
             return false;
         return true;
+    }
+
+    @Override
+    public int compareTo(Category o) {
+        if (this.id == null && o.id == null) return 0;
+        if (this.id == null) return -1;
+        if (o.id == null) return -1;
+        return this.id.compareTo(o.id);
     }
 }

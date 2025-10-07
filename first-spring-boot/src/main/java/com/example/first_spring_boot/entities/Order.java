@@ -2,8 +2,8 @@ package com.example.first_spring_boot.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import com.example.first_spring_boot.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -21,7 +21,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_order") //renomeando para nao dar conflito com o banco, com a palavra order
-public class Order implements Serializable{
+public class Order implements Serializable, Comparable<Order>{
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +39,7 @@ public class Order implements Serializable{
     private User client;
     
     @OneToMany(mappedBy = "id.order") //id.order porque na classe OrderItem tem o atibuto id do tipo OrderItemPK que dentro dele tem o objeto order
-    private Set<OrderItem> items = new HashSet<>();
+    private Set<OrderItem> items = new ConcurrentSkipListSet<>();
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
@@ -131,6 +131,14 @@ public class Order implements Serializable{
         } else if (!id.equals(other.id))
             return false;
         return true;
+    }
+
+    @Override
+    public int compareTo(Order o) {
+        if (this.id == null && o.id == null) return 0;
+        if (this.id == null) return -1;
+        if (o.id == null) return -1;
+        return this.id.compareTo(o.id);
     }
 
 

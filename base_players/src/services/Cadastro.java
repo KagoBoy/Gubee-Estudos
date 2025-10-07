@@ -2,8 +2,8 @@ package services;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 // import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import entidades.Pessoa;
 import entidades_enum.Elo;
@@ -11,7 +11,7 @@ import entidades_enum.Elo;
 public class Cadastro {
 
     Pessoa p;
-    private ArrayList<Pessoa> pessoas = new ArrayList<>();
+    private CopyOnWriteArrayList<Pessoa> pessoas = new CopyOnWriteArrayList<>();
     private DateTimeFormatter frmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private LocalDate dataFormatada;
     private LocalDate dataAtual = LocalDate.now();
