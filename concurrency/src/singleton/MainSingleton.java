@@ -3,6 +3,7 @@ package singleton;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class MainSingleton {
 
@@ -10,7 +11,6 @@ public class MainSingleton {
     public static void main(String[] args) throws InterruptedException {
         
         executor = Executors.newFixedThreadPool(2);
-        // cs = ClasseSingleton.getInstance(4);
         try {
             executor.submit(new DemoThreadCont());
             executor.submit(new DemoThreadCont());
@@ -34,8 +34,10 @@ public class MainSingleton {
 }
 
 class DemoThreadCont implements Runnable {
+    private static ReentrantLock lock = new ReentrantLock();
     @Override
     public void run() {
+        lock.lock();
         String threadName = Thread.currentThread().getName();
         for (int i = 0; i < 20; i++) {
             try {
@@ -44,9 +46,10 @@ class DemoThreadCont implements Runnable {
                 System.out.println(threadName + " incrementando");
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            } 
 
         }
+        lock.unlock();
 
     }
 

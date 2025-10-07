@@ -1,3 +1,4 @@
+package data;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Sender implements Runnable {
