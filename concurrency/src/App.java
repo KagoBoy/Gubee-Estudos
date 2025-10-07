@@ -15,6 +15,7 @@ public class App implements Runnable{
         Thread t2 = new Thread(new DemoWaitingStateRunnable());
         t2.start();
         try {
+            t2.join();
             System.out.println("t2.isAlive() antes da T2 ser finalizada: " + t2.isAlive());
             Thread.sleep(3000);
             System.out.println("t2.isAlive() depois da T2 ser finalizada: " + t2.isAlive());
@@ -35,7 +36,7 @@ class DemoWaitingStateRunnable implements Runnable {
             Thread.currentThread().interrupt();
             e.printStackTrace();
         }
-        //Timed_Waiting
+        //Waiting
         System.out.println("State da thread 1, enquanto a thread 2 esta rodando: " + App.t1.getState());
     }
 }
