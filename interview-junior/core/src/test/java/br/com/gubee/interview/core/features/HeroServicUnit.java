@@ -11,8 +11,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 import java.util.UUID;
-
-import org.checkerframework.checker.nullness.Opt;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,6 +21,7 @@ import br.com.gubee.interview.core.features.hero.HeroRepository;
 import br.com.gubee.interview.core.features.hero.HeroService;
 import br.com.gubee.interview.core.features.powerstats.PowerStatsRepository;
 import br.com.gubee.interview.model.Hero;
+import br.com.gubee.interview.model.HeroResponse;
 import br.com.gubee.interview.model.PowerStats;
 import br.com.gubee.interview.model.enums.Race;
 import br.com.gubee.interview.model.request.CreateHeroRequest;
@@ -140,6 +139,69 @@ public class HeroServicUnit {
                 heroService.deleteById(heroId);
 
                 verify(heroRepository, times(1)).deleteById(heroId);
+        }
+
+        @Test
+        public void findById() {
+                UUID heroId = UUID.randomUUID();
+                UUID powerStatsId = UUID.randomUUID();
+                Hero existingHero = Hero.builder()
+                                .id(heroId)
+                                .name("Yan")
+                                .race(Race.CYBORG)
+                                .powerStatsId(powerStatsId)
+                                .build();
+
+                PowerStats powerStats = PowerStats.builder()
+                                .id(powerStatsId)
+                                .strength(10)
+                                .agility(8)
+                                .dexterity(7)
+                                .intelligence(9)
+                                .build();
+                when(heroRepository.findById(heroId)).thenReturn(Optional.of(existingHero));
+                when(powerStatsRepository.findById(powerStatsId)).thenReturn(powerStats);
+
+                HeroResponse result = heroService.findById(heroId);
+
+                assertNotNull(result);
+                assertEquals(heroId, result.getId());
+                assertEquals("Yan", result.getName());
+                assertEquals(8, result.getPowerStats().getAgility());
+                assertEquals(Race.CYBORG, result.getRace());
+
+        }
+
+        @Test
+        public void findByName() {
+                UUID heroId = UUID.randomUUID();
+                UUID powerStatsId = UUID.randomUUID();
+                final String findName = "Yan";
+                Hero existingHero = Hero.builder()
+                                .id(heroId)
+                                .name("Yan")
+                                .race(Race.CYBORG)
+                                .powerStatsId(powerStatsId)
+                                .build();
+
+                PowerStats powerStats = PowerStats.builder()
+                                .id(powerStatsId)
+                                .strength(10)
+                                .agility(8)
+                                .dexterity(7)
+                                .intelligence(9)
+                                .build();
+                when(heroRepository.findByName(findName)).thenReturn(Optional.of(existingHero));
+                when(powerStatsRepository.findById(powerStatsId)).thenReturn(powerStats);
+
+                HeroResponse result = heroService.findByName(findName);
+
+                assertNotNull(result);
+                assertEquals(heroId, result.getId());
+                assertEquals("Yan", result.getName());
+                assertEquals(7, result.getPowerStats().getDexterity());
+                assertEquals(Race.CYBORG, result.getRace());
+
         }
 
         private CreateHeroRequest createHeroRequest() {
