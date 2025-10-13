@@ -3,6 +3,7 @@ package br.com.gubee.interview.core.features;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -54,7 +55,7 @@ public class HeroServicUnit {
     }
 
     @Test
-    public void updateWithAllRequiredArguments() {
+    public void updateByIdWithAllRequiredArguments() {
 
         UUID powerStatsId = UUID.randomUUID();
         UUID heroId = UUID.randomUUID();
@@ -66,19 +67,58 @@ public class HeroServicUnit {
                 .powerStatsId(powerStatsId)
                 .build();
 
+        Hero updatedHero = Hero.builder()
+                .id(heroId)
+                .name("Lanterna Verde")
+                .race(Race.ALIEN)
+                .powerStatsId(powerStatsId)
+                .build();
 
-        when(heroRepository.findById(heroId)).thenReturn(Optional.of(existingHero));
+        when(heroRepository.findById(heroId)).thenReturn(Optional.of(existingHero))
+                .thenReturn(Optional.of(updatedHero));
         doNothing().when(powerStatsRepository).update(any(PowerStats.class));
         doNothing().when(heroRepository).updateById(any(Hero.class), any(UUID.class));
 
-
         Hero result = heroService.updateById(createHeroRequest(), heroId);
-
 
         assertNotNull(result);
         assertEquals(heroId, result.getId());
-        assertEquals("Yan", result.getName());
+        assertEquals("Lanterna Verde", result.getName());
         assertEquals(Race.ALIEN, result.getRace());
+    }
+
+    @Test
+    public void updatebyNameWithAllRequiredArguments() {
+
+        UUID heroId = UUID.randomUUID();
+        UUID powerStatsId = UUID.randomUUID();
+        final String findName = "Yan";
+
+        Hero existingHero = Hero.builder()
+                .id(heroId)
+                .name("Yan")
+                .race(Race.ALIEN)
+                .powerStatsId(powerStatsId)
+                .build();
+
+        Hero updatedHero = Hero.builder()
+                .id(heroId)
+                .name("Superman")
+                .race(Race.DIVINE)
+                .powerStatsId(powerStatsId)
+                .build();
+
+        when(heroRepository.findByName(findName)).thenReturn(Optional.of(existingHero))
+                .thenReturn(Optional.of(updatedHero));
+        doNothing().when(powerStatsRepository).update(any(PowerStats.class));
+        doNothing().when(heroRepository).updateByName(any(Hero.class), eq(findName));
+
+        Hero result = heroService.updateByName(createHeroRequest(), findName);
+
+        assertNotNull(result);
+        assertEquals(heroId, result.getId());
+        assertEquals("Superman", result.getName());
+        assertEquals(Race.DIVINE, result.getRace());
     }
 
     private CreateHeroRequest createHeroRequest() {
