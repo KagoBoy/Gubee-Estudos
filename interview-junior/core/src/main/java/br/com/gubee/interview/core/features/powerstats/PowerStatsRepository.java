@@ -1,5 +1,6 @@
 package br.com.gubee.interview.core.features.powerstats;
 
+import br.com.gubee.interview.core.exception.PowerStatsNotFoundException;
 import br.com.gubee.interview.model.PowerStats;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -8,7 +9,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -41,12 +41,12 @@ public class PowerStatsRepository {
                 new BeanPropertySqlParameterSource(powerStats));
     }
 
-    public Optional<PowerStats> findById(UUID id) {
+    public PowerStats findById(UUID id) {
         final Map<String, Object> params = Map.of("id", id);
 
         try {
             PowerStats powerStats = namedParameterJdbcTemplate.queryForObject(
-                    "SELECT * FROM power_stats WHERE id = :id",
+                    FIND_POWER_STATS_ID_QUERY,
                     params,
                     (rs, rowNum) -> PowerStats.builder()
                             .id(rs.getObject("id", UUID.class))
@@ -58,9 +58,9 @@ public class PowerStatsRepository {
                             .updatedAt(rs.getTimestamp("updated_at").toInstant())
                             .build()
             );
-            return Optional.ofNullable(powerStats);
+            return powerStats;
         } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
+            throw new PowerStatsNotFoundException("Nulo");
         }
     }
 }

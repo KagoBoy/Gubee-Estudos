@@ -16,10 +16,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class HeroRepository {
 
+    
+
     private static final String CREATE_HERO_QUERY = "INSERT INTO hero" +
             " (name, race, power_stats_id)" +
             " VALUES (:name, :race, :powerStatsId) RETURNING id";
-
 
     private static final String FIND_HERO_NAME_QUERY = "SELECT * FROM hero" +
             " WHERE name = :name";
@@ -41,7 +42,6 @@ public class HeroRepository {
     private static final String DELETE_HERO_ID_QUERY = "DELETE FROM hero" +
             " WHERE id = :id";
 
-
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     UUID create(Hero hero) {
@@ -61,7 +61,6 @@ public class HeroRepository {
                 "powerStatsId", hero.getPowerStatsId(),
                 "id", id);
 
-
         namedParameterJdbcTemplate.update(UPDATE_HERO_ID_QUERY, params);
     }
 
@@ -74,25 +73,25 @@ public class HeroRepository {
         namedParameterJdbcTemplate.update(UPDATE_HERO_NAME_QUERY, params);
     }
 
-    void deleteById(UUID id){
+    void deleteById(UUID id) {
         final Map<String, Object> params = Map.of("id", id);
         int rowsAffected = namedParameterJdbcTemplate.update(DELETE_HERO_ID_QUERY, params);
 
-        if (rowsAffected == 0){
+        if (rowsAffected == 0) {
             throw new HeroNotFoundException("Hero not found with id: " + id);
         }
     }
 
-    void deleteByName(String name){
+    void deleteByName(String name) {
         final Map<String, Object> params = Map.of("name", name);
         int rowsAffected = namedParameterJdbcTemplate.update(DELETE_HERO_NAME_QUERY, params);
 
-        if (rowsAffected == 0){
+        if (rowsAffected == 0) {
             throw new HeroNotFoundException("Hero not found with name: " + name);
         }
     }
 
-    Optional<Hero> findByName(String name){
+    Optional<Hero> findByName(String name) {
         final Map<String, Object> params = Map.of("name", name);
 
         try {
@@ -106,17 +105,17 @@ public class HeroRepository {
                             .powerStatsId(rs.getObject("power_stats_id", UUID.class))
                             .createdAt(rs.getTimestamp("created_at").toInstant())
                             .updatedAt(rs.getTimestamp("updated_at").toInstant())
-                            .build()
-            );
+                            .build());
             return Optional.ofNullable(hero);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
 
-    Optional<Hero> findById(UUID id){
-        final Map<String, Object> params = Map.of("id", id);
+    
 
+    Optional<Hero> findById(UUID id) {
+        final Map<String, Object> params = Map.of("id", id);
 
         try {
             Hero hero = namedParameterJdbcTemplate.queryForObject(
@@ -129,8 +128,7 @@ public class HeroRepository {
                             .powerStatsId(rs.getObject("power_stats_id", UUID.class))
                             .createdAt(rs.getTimestamp("created_at").toInstant())
                             .updatedAt(rs.getTimestamp("updated_at").toInstant())
-                            .build()
-            );
+                            .build());
             return Optional.ofNullable(hero);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();

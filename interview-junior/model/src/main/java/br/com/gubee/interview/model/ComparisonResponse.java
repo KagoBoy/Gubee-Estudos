@@ -15,6 +15,8 @@ public class ComparisonResponse {
 
         private UUID hero1Id;
         private UUID hero2Id;
+        private String hero_1;
+        private String hero_2;
         private short strength;
         private short agility;
         private short dexterity;

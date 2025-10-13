@@ -2,6 +2,7 @@ package br.com.gubee.interview.core.features.hero;
 
 import br.com.gubee.interview.model.ComparisonResponse;
 import br.com.gubee.interview.model.Hero;
+import br.com.gubee.interview.model.HeroResponse;
 import br.com.gubee.interview.model.request.CreateHeroRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,14 +39,14 @@ public class HeroController {
     }
 
     @GetMapping(value = "/name/{name}")
-    public ResponseEntity<Hero> findByName(@PathVariable String name) {
-        Hero hero = heroService.findByName(name);
+    public ResponseEntity<HeroResponse> findByName(@PathVariable String name) {
+        HeroResponse hero = heroService.findByName(name);
         return ResponseEntity.ok(hero);
     }
 
     @GetMapping(value = "/id/{id}")
-    public ResponseEntity<Hero> findById(@PathVariable UUID id) {
-        Hero hero = heroService.findById(id);
+    public ResponseEntity<HeroResponse> findById(@PathVariable UUID id) {
+        HeroResponse hero = heroService.findById(id);
         return ResponseEntity.ok(hero);
     }
 
