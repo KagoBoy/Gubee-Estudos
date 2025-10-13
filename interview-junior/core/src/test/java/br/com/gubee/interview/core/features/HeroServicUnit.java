@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import br.com.gubee.interview.core.features.hero.HeroRepository;
 import br.com.gubee.interview.core.features.hero.HeroService;
 import br.com.gubee.interview.core.features.powerstats.PowerStatsRepository;
+import br.com.gubee.interview.model.ComparisonResponse;
 import br.com.gubee.interview.model.Hero;
 import br.com.gubee.interview.model.HeroResponse;
 import br.com.gubee.interview.model.PowerStats;
@@ -201,6 +202,61 @@ public class HeroServicUnit {
                 assertEquals("Yan", result.getName());
                 assertEquals(7, result.getPowerStats().getDexterity());
                 assertEquals(Race.CYBORG, result.getRace());
+
+        }
+
+        @Test
+        public void ComparisonResponseTest(){
+                UUID hero1Id = UUID.randomUUID();
+                UUID powerStats1Id = UUID.randomUUID();
+                UUID hero2Id = UUID.randomUUID();
+                UUID powerStats2Id = UUID.randomUUID();
+
+                Hero hero1 = Hero.builder()
+                                .id(hero1Id)
+                                .name("Yan")
+                                .race(Race.CYBORG)
+                                .powerStatsId(powerStats1Id)
+                                .build();
+                
+                Hero hero2 = Hero.builder()
+                                .id(hero2Id)
+                                .name("Superman")
+                                .race(Race.DIVINE)
+                                .powerStatsId(powerStats2Id)
+                                .build();
+
+                PowerStats powerStats1 = PowerStats.builder()
+                                .id(powerStats1Id)
+                                .strength(10)
+                                .agility(8)
+                                .dexterity(7)
+                                .intelligence(9)
+                                .build();
+
+                PowerStats powerStats2 = PowerStats.builder()
+                                .id(powerStats2Id)
+                                .strength(2)
+                                .agility(3)
+                                .dexterity(5)
+                                .intelligence(4)
+                                .build();
+
+                when(heroRepository.findById(hero1Id)).thenReturn(Optional.of(hero1));
+                when(heroRepository.findById(hero2Id)).thenReturn(Optional.of(hero2));
+                when(powerStatsRepository.findById(powerStats1Id)).thenReturn(powerStats1);
+                when(powerStatsRepository.findById(powerStats2Id)).thenReturn(powerStats2);
+
+                ComparisonResponse result = heroService.compareHeroes(hero1Id, hero2Id);
+
+
+                assertNotNull(result);
+                assertEquals(8, result.getStrength());
+                assertEquals(5, result.getAgility());
+                assertEquals(2, result.getDexterity());
+                assertEquals(5, result.getIntelligence());
+                assertEquals(hero1Id, result.getHero1Id());
+                assertEquals(hero2Id, result.getHero2Id());
 
         }
 
