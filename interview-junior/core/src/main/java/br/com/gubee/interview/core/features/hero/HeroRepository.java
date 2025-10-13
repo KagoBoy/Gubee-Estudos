@@ -44,7 +44,7 @@ public class HeroRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    UUID create(Hero hero) {
+    public UUID create(Hero hero) {
         final Map<String, Object> params = Map.of("name", hero.getName(),
                 "race", hero.getRace().name(),
                 "powerStatsId", hero.getPowerStatsId());
