@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.checkerframework.checker.nullness.Opt;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,107 +30,127 @@ import br.com.gubee.interview.model.request.CreateHeroRequest;
 @ExtendWith(MockitoExtension.class)
 public class HeroServicUnit {
 
-    @Mock
-    private PowerStatsRepository powerStatsRepository;
+        @Mock
+        private PowerStatsRepository powerStatsRepository;
 
-    @Mock
-    private HeroRepository heroRepository;
+        @Mock
+        private HeroRepository heroRepository;
 
-    @InjectMocks
-    private HeroService heroService;
+        @InjectMocks
+        private HeroService heroService;
 
-    @Test
-    public void createHeroWithAllRequiredArguments() {
+        @Test
+        public void createHeroWithAllRequiredArguments() {
 
-        UUID powerStatsId = UUID.randomUUID();
-        UUID heroId = UUID.randomUUID();
+                UUID powerStatsId = UUID.randomUUID();
+                UUID heroId = UUID.randomUUID();
 
-        when(powerStatsRepository.create(any(PowerStats.class))).thenReturn(powerStatsId);
+                when(powerStatsRepository.create(any(PowerStats.class))).thenReturn(powerStatsId);
 
-        when(heroRepository.create(any(Hero.class))).thenReturn(heroId);
+                when(heroRepository.create(any(Hero.class))).thenReturn(heroId);
 
-        UUID result = heroService.create(createHeroRequest());
+                UUID result = heroService.create(createHeroRequest());
 
-        assertEquals(heroId, result);
+                assertEquals(heroId, result);
 
-    }
+        }
 
-    @Test
-    public void updateByIdWithAllRequiredArguments() {
+        @Test
+        public void updateByIdWithAllRequiredArguments() {
 
-        UUID powerStatsId = UUID.randomUUID();
-        UUID heroId = UUID.randomUUID();
+                UUID powerStatsId = UUID.randomUUID();
+                UUID heroId = UUID.randomUUID();
 
-        Hero existingHero = Hero.builder()
-                .id(heroId)
-                .name("Yan")
-                .race(Race.ALIEN)
-                .powerStatsId(powerStatsId)
-                .build();
+                Hero existingHero = Hero.builder()
+                                .id(heroId)
+                                .name("Yan")
+                                .race(Race.ALIEN)
+                                .powerStatsId(powerStatsId)
+                                .build();
 
-        Hero updatedHero = Hero.builder()
-                .id(heroId)
-                .name("Lanterna Verde")
-                .race(Race.ALIEN)
-                .powerStatsId(powerStatsId)
-                .build();
+                Hero updatedHero = Hero.builder()
+                                .id(heroId)
+                                .name("Lanterna Verde")
+                                .race(Race.ALIEN)
+                                .powerStatsId(powerStatsId)
+                                .build();
 
-        when(heroRepository.findById(heroId)).thenReturn(Optional.of(existingHero))
-                .thenReturn(Optional.of(updatedHero));
-        doNothing().when(powerStatsRepository).update(any(PowerStats.class));
-        doNothing().when(heroRepository).updateById(any(Hero.class), any(UUID.class));
+                when(heroRepository.findById(heroId)).thenReturn(Optional.of(existingHero))
+                                .thenReturn(Optional.of(updatedHero));
+                doNothing().when(powerStatsRepository).update(any(PowerStats.class));
+                doNothing().when(heroRepository).updateById(any(Hero.class), any(UUID.class));
 
-        Hero result = heroService.updateById(createHeroRequest(), heroId);
+                Hero result = heroService.updateById(createHeroRequest(), heroId);
 
-        assertNotNull(result);
-        assertEquals(heroId, result.getId());
-        assertEquals("Lanterna Verde", result.getName());
-        assertEquals(Race.ALIEN, result.getRace());
-    }
+                assertNotNull(result);
+                assertEquals(heroId, result.getId());
+                assertEquals("Lanterna Verde", result.getName());
+                assertEquals(Race.ALIEN, result.getRace());
+        }
 
-    @Test
-    public void updatebyNameWithAllRequiredArguments() {
+        @Test
+        public void updatebyNameWithAllRequiredArguments() {
 
-        UUID heroId = UUID.randomUUID();
-        UUID powerStatsId = UUID.randomUUID();
-        final String findName = "Yan";
+                UUID heroId = UUID.randomUUID();
+                UUID powerStatsId = UUID.randomUUID();
+                final String findName = "Yan";
 
-        Hero existingHero = Hero.builder()
-                .id(heroId)
-                .name("Yan")
-                .race(Race.ALIEN)
-                .powerStatsId(powerStatsId)
-                .build();
+                Hero existingHero = Hero.builder()
+                                .id(heroId)
+                                .name("Yan")
+                                .race(Race.ALIEN)
+                                .powerStatsId(powerStatsId)
+                                .build();
 
-        Hero updatedHero = Hero.builder()
-                .id(heroId)
-                .name("Superman")
-                .race(Race.DIVINE)
-                .powerStatsId(powerStatsId)
-                .build();
+                Hero updatedHero = Hero.builder()
+                                .id(heroId)
+                                .name("Superman")
+                                .race(Race.DIVINE)
+                                .powerStatsId(powerStatsId)
+                                .build();
 
-        when(heroRepository.findByName(findName)).thenReturn(Optional.of(existingHero))
-                .thenReturn(Optional.of(updatedHero));
-        doNothing().when(powerStatsRepository).update(any(PowerStats.class));
-        doNothing().when(heroRepository).updateByName(any(Hero.class), eq(findName));
+                when(heroRepository.findByName(findName)).thenReturn(Optional.of(existingHero))
+                                .thenReturn(Optional.of(updatedHero));
+                doNothing().when(powerStatsRepository).update(any(PowerStats.class));
+                doNothing().when(heroRepository).updateByName(any(Hero.class), eq(findName));
 
-        Hero result = heroService.updateByName(createHeroRequest(), findName);
+                Hero result = heroService.updateByName(createHeroRequest(), findName);
 
-        assertNotNull(result);
-        assertEquals(heroId, result.getId());
-        assertEquals("Superman", result.getName());
-        assertEquals(Race.DIVINE, result.getRace());
-    }
+                assertNotNull(result);
+                assertEquals(heroId, result.getId());
+                assertEquals("Superman", result.getName());
+                assertEquals(Race.DIVINE, result.getRace());
+        }
 
-    private CreateHeroRequest createHeroRequest() {
-        return CreateHeroRequest.builder()
-                .name("Batman")
-                .agility(5)
-                .dexterity(8)
-                .strength(6)
-                .intelligence(10)
-                .race(Race.HUMAN)
-                .build();
-    }
+        @Test
+        public void deleteByName() {
+                String heroName = "Yan";
+
+                doNothing().when(heroRepository).deleteByName(heroName);
+                heroService.deleteByName(heroName);
+
+                verify(heroRepository, times(1)).deleteByName(heroName);
+        }
+
+        @Test
+        public void deleteById() {
+                UUID heroId = UUID.randomUUID();
+
+                doNothing().when(heroRepository).deleteById(heroId);
+                heroService.deleteById(heroId);
+
+                verify(heroRepository, times(1)).deleteById(heroId);
+        }
+
+        private CreateHeroRequest createHeroRequest() {
+                return CreateHeroRequest.builder()
+                                .name("Batman")
+                                .agility(5)
+                                .dexterity(8)
+                                .strength(6)
+                                .intelligence(10)
+                                .race(Race.HUMAN)
+                                .build();
+        }
 
 }
