@@ -55,7 +55,7 @@ public class HeroRepository {
                 UUID.class);
     }
 
-    void updateById(Hero hero, UUID id) {
+    public void updateById(Hero hero, UUID id) {
         final Map<String, Object> params = Map.of("name", hero.getName(),
                 "race", hero.getRace().name(),
                 "powerStatsId", hero.getPowerStatsId(),
@@ -64,7 +64,7 @@ public class HeroRepository {
         namedParameterJdbcTemplate.update(UPDATE_HERO_ID_QUERY, params);
     }
 
-    void updateByName(Hero hero, String name) {
+    public void updateByName(Hero hero, String name) {
         final Map<String, Object> params = Map.of("name", hero.getName(),
                 "race", hero.getRace().name(),
                 "powerStatsId", hero.getPowerStatsId(),
@@ -73,7 +73,7 @@ public class HeroRepository {
         namedParameterJdbcTemplate.update(UPDATE_HERO_NAME_QUERY, params);
     }
 
-    void deleteById(UUID id) {
+    public void deleteById(UUID id) {
         final Map<String, Object> params = Map.of("id", id);
         int rowsAffected = namedParameterJdbcTemplate.update(DELETE_HERO_ID_QUERY, params);
 
@@ -82,7 +82,7 @@ public class HeroRepository {
         }
     }
 
-    void deleteByName(String name) {
+    public void deleteByName(String name) {
         final Map<String, Object> params = Map.of("name", name);
         int rowsAffected = namedParameterJdbcTemplate.update(DELETE_HERO_NAME_QUERY, params);
 
@@ -91,7 +91,7 @@ public class HeroRepository {
         }
     }
 
-    Optional<Hero> findByName(String name) {
+    public Optional<Hero> findByName(String name) {
         final Map<String, Object> params = Map.of("name", name);
 
         try {
@@ -114,7 +114,7 @@ public class HeroRepository {
 
     
 
-    Optional<Hero> findById(UUID id) {
+    public Optional<Hero> findById(UUID id) {
         final Map<String, Object> params = Map.of("id", id);
 
         try {
