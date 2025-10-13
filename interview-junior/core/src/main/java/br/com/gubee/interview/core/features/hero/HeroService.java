@@ -165,7 +165,9 @@ public class HeroService {
                 short intelligenceDiff = (short) (stats1.getIntelligence() - stats2.getIntelligence());
 
                 return ComparisonResponse.builder()
+                                .hero1Id(hero1Id)
                                 .hero_1(hero1.getName())
+                                .hero2Id(hero2Id)
                                 .hero_2(hero2.getName())
                                 .strength(strengthDiff)
                                 .agility(agilityDiff)
