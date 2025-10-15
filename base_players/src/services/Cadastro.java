@@ -16,52 +16,60 @@ public class Cadastro {
     private LocalDate dataFormatada;
     private LocalDate dataAtual = LocalDate.now();
     private int idade;
-    
-    //Adicionar player
-    public void adicionarPlayer(String nome, String dataNasc, String nickName, String role1, String role2, Elo peakElo){
+
+    // Adicionar player
+    public void adicionarPlayer(String nome, String dataNasc, String nickName, String role1, String role2,
+            Elo peakElo) {
         dataFormatada = LocalDate.parse(dataNasc, frmt);
         idade = dataAtual.getYear() - dataFormatada.getYear();
         p = new Pessoa(nome, dataFormatada, nickName, role1, role2, peakElo, idade);
-        pessoas.add(p);
-        System.out.println("Player adicionado!");
+        boolean v = p.validarNick(nickName);
+        if (v) {       
+            pessoas.add(p);
+            System.out.println("Player adicionado!");
+        } else {
+            System.out.println("NickName inválido!");
+            System.out.println(nickName);
+        }
+
     }
 
-    //Metodos de remover players
-    public void removerPlayerNick(String nickName){
+    // Metodos de remover players
+    public void removerPlayerNick(String nickName) {
         // Optional<Pessoa> encontrada = pessoas
         // .stream()
         // .filter(pessoa -> pessoa.getNickName()
         // .equalsIgnoreCase(nickName))
         // .findFirst();
         Pessoa encontrada = buscaPlayerNick(nickName);
-        if (encontrada != null){
+        if (encontrada != null) {
             pessoas.remove(encontrada);
             System.out.println("Player com nick " + nickName + " removido com sucesso!");
-        }else {
+        } else {
             System.out.println("Player não foi encontrado!");
         }
-        
+
     }
 
-    public void removerPlayerNome(String nome){
+    public void removerPlayerNome(String nome) {
         // Optional<Pessoa> encontrada = pessoas
         // .stream()
         // .filter(pessoa -> pessoa.getNome()
         // .equalsIgnoreCase(nome))
         // .findFirst();
         Pessoa encontrada = buscaPlayerNome(nome);
-        if(encontrada != null){
+        if (encontrada != null) {
             pessoas.remove(encontrada);
             System.out.println("Player com nome " + nome + " removido com sucesso!");
-        }else {
+        } else {
             System.out.println("Player não foi encontrado!");
         }
-        
+
     }
 
-
-    //Metodos de atualizar players
-    public Pessoa atualizaPlayer (int indice, String nome, String dataNasc, String nickName, String role1, String role2, Elo peakElo){
+    // Metodos de atualizar players
+    public Pessoa atualizaPlayer(int indice, String nome, String dataNasc, String nickName, String role1, String role2,
+            Elo peakElo) {
         dataFormatada = LocalDate.parse(dataNasc, frmt);
         idade = dataAtual.getYear() - dataFormatada.getYear();
         p = new Pessoa(nome, dataFormatada, nickName, role1, role2, peakElo, idade);
@@ -69,17 +77,18 @@ public class Cadastro {
         return p;
     }
 
-    private Pessoa atualizaPlayer (int indice, Pessoa pe){
+    private Pessoa atualizaPlayer(int indice, Pessoa pe) {
         pessoas.set(indice, pe);
         return pe;
     }
 
-    public Pessoa atualizaPlayerPorNome (String nome, String newNome, String dataNasc, String nickName, String role1, String role2, Elo peakElo){
+    public Pessoa atualizaPlayerPorNome(String nome, String newNome, String dataNasc, String nickName, String role1,
+            String role2, Elo peakElo) {
         dataFormatada = LocalDate.parse(dataNasc, frmt);
         idade = dataAtual.getYear() - dataFormatada.getYear();
         p = new Pessoa(newNome, dataFormatada, nickName, role1, role2, peakElo, idade);
         Pessoa encontrada = buscaPlayerNome(nome);
-        if(encontrada != null){
+        if (encontrada != null) {
             int indice = pessoas.indexOf(encontrada);
             atualizaPlayer(indice, p);
             return p;
@@ -87,12 +96,13 @@ public class Cadastro {
         return null;
     }
 
-    public Pessoa atualizaPlayerPorNick (String nick, String nome, String dataNasc, String newNick, String role1, String role2, Elo peakElo){
+    public Pessoa atualizaPlayerPorNick(String nick, String nome, String dataNasc, String newNick, String role1,
+            String role2, Elo peakElo) {
         dataFormatada = LocalDate.parse(dataNasc, frmt);
         idade = dataAtual.getYear() - dataFormatada.getYear();
         p = new Pessoa(nome, dataFormatada, newNick, role1, role2, peakElo, idade);
         Pessoa encontrada = buscaPlayerNick(nick);
-        if(encontrada != null){
+        if (encontrada != null) {
             int indice = pessoas.indexOf(encontrada);
             atualizaPlayer(indice, p);
             return p;
@@ -100,36 +110,30 @@ public class Cadastro {
         return null;
     }
 
-
-
-
-    //Metodos de buscar players
-    public Pessoa buscaPlayerNick(String nickname){
-        for (Pessoa pessoa : pessoas){
-            if(pessoa.getNickName().equalsIgnoreCase(nickname)){
+    // Metodos de buscar players
+    public Pessoa buscaPlayerNick(String nickname) {
+        for (Pessoa pessoa : pessoas) {
+            if (pessoa.getNickName().equalsIgnoreCase(nickname)) {
                 return pessoa;
             }
         }
         return null;
     }
 
-    public Pessoa buscaPlayerNome(String nome){
-        for (Pessoa pessoa : pessoas){
-            if(pessoa.getNome().equalsIgnoreCase(nome)){
+    public Pessoa buscaPlayerNome(String nome) {
+        for (Pessoa pessoa : pessoas) {
+            if (pessoa.getNome().equalsIgnoreCase(nome)) {
                 return pessoa;
             }
         }
         return null;
     }
 
-    public Pessoa buscaAllPlayers(){
-        for (Pessoa pessoa : pessoas){
+    public Pessoa buscaAllPlayers() {
+        for (Pessoa pessoa : pessoas) {
             System.out.println(pessoa);
         }
         return null;
     }
 
-
-
-    
 }

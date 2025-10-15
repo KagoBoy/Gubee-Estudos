@@ -20,6 +20,8 @@ public class App {
         c.removerPlayerNick("Minazuki #BR3");
         c.removerPlayerNome("Leonardo");
 
+        c.adicionarPlayer("Lucas Tarzan", "15/07/2003", "Tarzan Sergipano br1", "Top", "Jungle", Elo.CHALLENGER);
+
         c.buscaAllPlayers();
 
         System.out.println(c.buscaPlayerNick("dr yam #drs").toString_2());
