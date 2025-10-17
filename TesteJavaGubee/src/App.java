@@ -12,21 +12,20 @@ import proxy.NotificationHandler;
 import factories.PremiumNotificationFactory;
 import factories.StandardNotifcationFactory;
 
-public class App{
+public class App {
 
     private static UseCaseNotification createProxy(UseCaseNotification target) {
         ClassLoader loader = target.getClass().getClassLoader();
         Class[] interfaces = target.getClass().getInterfaces();
         return (UseCaseNotification) Proxy.newProxyInstance(
-            loader, 
-            interfaces, 
-            new NotificationHandler(target)
-        );
+                loader,
+                interfaces,
+                new NotificationHandler(target));
     }
 
     private static NotificationFactory createFactoryBasedOnEnvironment() {
         String environment = System.getProperty("notification.type", "premium");
-        
+
         switch (environment.toLowerCase()) {
             case "premium":
                 return new PremiumNotificationFactory();
@@ -35,25 +34,25 @@ public class App{
                 return new StandardNotifcationFactory();
         }
     }
+
     public static void main(String[] args) throws Exception {
         NotificationFactory factory = createFactoryBasedOnEnvironment();
-        
-        UseCaseNotification useCase = factory.createUseCase();
+
+        UseCaseNotification patternProxy = factory.createUseCase();
+
+        UseCaseNotification dynamicProxy = createProxy(patternProxy);
         PresenterNotification[] presenters = factory.createAllPresenters();
-        
-        UseCaseNotification proxyNotification = createProxy(useCase);
-        
+
         ScheduledExecutorService controller = Executors.newSingleThreadScheduledExecutor();
-        
+
         controller.scheduleAtFixedRate(() -> {
             try {
                 var nextPos = Math.abs(new Random().nextInt()) % presenters.length;
-                proxyNotification.notifyEveryHour(UUID.randomUUID().toString(), presenters[nextPos]);
+                dynamicProxy.notifyEveryHour(UUID.randomUUID().toString(), presenters[nextPos]);
             } catch (Exception e) {
                 System.out.println("Erro capturado no client: " + e.getMessage());
             }
             System.out.println("---");
         }, 1, 3, TimeUnit.SECONDS);
-
     }
 }

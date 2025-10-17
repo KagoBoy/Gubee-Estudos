@@ -3,12 +3,14 @@ package factories;
 import interfaces.NotificationFactory;
 import interfaces.UseCaseNotification;
 import interfaces.UseCaseNotification.PresenterNotification;
+import proxy.UseCaseNotificationProxy;
 import services.PoolingUseCaseNotification;;
 
 public class PremiumNotificationFactory implements NotificationFactory{
     @Override
         public UseCaseNotification createUseCase() {
-            return new PoolingUseCaseNotification();
+            UseCaseNotification realSubject = new PoolingUseCaseNotification();
+            return new UseCaseNotificationProxy(realSubject);
         }
 
         @Override
