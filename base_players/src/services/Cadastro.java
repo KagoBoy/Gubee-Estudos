@@ -15,22 +15,14 @@ public class Cadastro {
     private DateTimeFormatter frmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private LocalDate dataFormatada;
     private LocalDate dataAtual = LocalDate.now();
-    private int idade;
 
     // Adicionar player
     public void adicionarPlayer(String nome, String dataNasc, String nickName, String role1, String role2,
             Elo peakElo) {
         dataFormatada = LocalDate.parse(dataNasc, frmt);
-        idade = dataAtual.getYear() - dataFormatada.getYear();
-        p = new Pessoa(nome, dataFormatada, nickName, role1, role2, peakElo, idade);
-        boolean v = p.validarNick(nickName);
-        if (v) {       
-            pessoas.add(p);
-            System.out.println("Player adicionado!");
-        } else {
-            System.out.println("NickName inválido!");
-            System.out.println(nickName);
-        }
+        p = new Pessoa(nome, dataFormatada, nickName, role1, role2, peakElo);
+        pessoas.add(p);
+        System.out.println("Player adicionado!");
 
     }
 
@@ -71,8 +63,7 @@ public class Cadastro {
     public Pessoa atualizaPlayer(int indice, String nome, String dataNasc, String nickName, String role1, String role2,
             Elo peakElo) {
         dataFormatada = LocalDate.parse(dataNasc, frmt);
-        idade = dataAtual.getYear() - dataFormatada.getYear();
-        p = new Pessoa(nome, dataFormatada, nickName, role1, role2, peakElo, idade);
+        p = new Pessoa(nome, dataFormatada, nickName, role1, role2, peakElo);
         pessoas.set(indice, p);
         return p;
     }
@@ -85,8 +76,7 @@ public class Cadastro {
     public Pessoa atualizaPlayerPorNome(String nome, String newNome, String dataNasc, String nickName, String role1,
             String role2, Elo peakElo) {
         dataFormatada = LocalDate.parse(dataNasc, frmt);
-        idade = dataAtual.getYear() - dataFormatada.getYear();
-        p = new Pessoa(newNome, dataFormatada, nickName, role1, role2, peakElo, idade);
+        p = new Pessoa(newNome, dataFormatada, nickName, role1, role2, peakElo);
         Pessoa encontrada = buscaPlayerNome(nome);
         if (encontrada != null) {
             int indice = pessoas.indexOf(encontrada);
@@ -99,8 +89,7 @@ public class Cadastro {
     public Pessoa atualizaPlayerPorNick(String nick, String nome, String dataNasc, String newNick, String role1,
             String role2, Elo peakElo) {
         dataFormatada = LocalDate.parse(dataNasc, frmt);
-        idade = dataAtual.getYear() - dataFormatada.getYear();
-        p = new Pessoa(nome, dataFormatada, newNick, role1, role2, peakElo, idade);
+        p = new Pessoa(nome, dataFormatada, newNick, role1, role2, peakElo);
         Pessoa encontrada = buscaPlayerNick(nick);
         if (encontrada != null) {
             int indice = pessoas.indexOf(encontrada);

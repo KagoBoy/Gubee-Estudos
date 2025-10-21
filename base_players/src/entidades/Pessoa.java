@@ -2,9 +2,12 @@ package entidades;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
 import entidades_enum.Elo;
+import services.ValidadorDeNick;
+import services.ValidadorDeNickDefault;
 
 public class Pessoa {
     private String nome;
@@ -19,18 +22,23 @@ public class Pessoa {
     private int idade;
     private DateTimeFormatter frmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
+    private ValidadorDeNick validador = new ValidadorDeNickDefault();
     public Pessoa() {
     }
 
-    public Pessoa(String nome, LocalDate dataNasc, String nickName, String role1, String role2, Elo peakElo,
-            int idade) {
+    public Pessoa(String nome, LocalDate dataNasc, String nickName, String role1, String role2, Elo peakElo) {
         this.nome = nome;
         this.dataNasc = dataNasc;
-        this.nickName = nickName;
+        if (validarNick(nickName)) {
+            this.nickName = nickName;
+        } else {
+            throw new IllegalArgumentException("Nickname " + nickName + "inválido!");
+        }
+
         this.role1 = role1;
         this.role2 = role2;
         this.peakElo = peakElo;
-        this.idade = idade;
+        this.idade = Period.between(dataNasc, LocalDate.now()).getYears();
     }
 
     public int getIdade() {
@@ -62,7 +70,11 @@ public class Pessoa {
     }
 
     public void setNickName(String nickName) {
-        this.nickName = nickName;
+        if (validarNick(nickName)){
+            this.nickName = nickName;
+        } else{
+            throw new IllegalArgumentException("Nickname " + nickName + " inválido!");
+        }
     }
 
     public String getRole1() {
@@ -106,28 +118,7 @@ public class Pessoa {
     }
 
     public boolean validarNick(String nickName) {
-        try {
-            Field field = Pessoa.class.getDeclaredField("nickName");
-            if (field.isAnnotationPresent(NickName.class)) {
-                if (this.nickName == null || this.nickName.trim().isEmpty()){
-                    return false;
-                }
-
-                String[] split = this.nickName.split("#");
-                if (split.length != 2){
-                    return false;
-                }
-
-                if (split[0].trim().isEmpty() || split[1].trim().isEmpty()){
-                    return false;
-                }
-                return true;
-            }
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        return false; 
-  
+        return validador.validar(nickName);
     }
 
 }
