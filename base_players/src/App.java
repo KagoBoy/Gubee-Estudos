@@ -1,30 +1,38 @@
 import entidades_enum.Elo;
-import services.Cadastro;
+import entidades.Pessoa;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        Cadastro c = new Cadastro();
-        c.adicionarPlayer("Yan Victor", "10/02/2003", "dr Yam #drs", "Atirador", "Suporte", Elo.MESTRE);
-        c.adicionarPlayer("Leonardo", "20/06/2003", "perspectiva #leo", "Suporte", "Atirador", Elo.MESTRE);
-        c.adicionarPlayer("Roberto Neto", "10/12/2002", "Minazuki #br3", "Mid", "Atirador", Elo.MESTRE);
-        c.adicionarPlayer("Endy Alexandre", "25/08/2001", "Dyne #br1", "Jungle", "Top", Elo.MESTRE);
-        c.adicionarPlayer("Lucas Tarzan", "15/07/2003", "Tarzan Sergipano #br1", "Top", "Jungle", Elo.CHALLENGER);
-        c.buscaAllPlayers();
+        Pessoa pessoa = new Pessoa();
 
-        c.atualizaPlayer(0, "Yan Victor", "10/02/2003", "dr Yam #drs", "Atirador", "Suporte", Elo.CHALLENGER);
-        c.atualizaPlayerPorNick("Dyne #br1", "Endy Alexandre", "25/08/2001", "Dyne #br1", "Jungle", "Top", Elo.FERRO);
-        c.atualizaPlayerPorNome("Lucas Tarzan", "Lucas Tarzan", "15/07/2003", "Tarzan Sergipano #br1", "Top", "Jungle", Elo.BRONZE);
+        try {
+            pessoa.adicionarPlayer("Yan Victor", "10/02/2003", "dr Yam #drs", "Atirador", "Suporte", Elo.MESTRE);
+            pessoa.adicionarPlayer("Leonardo", "20/06/2003", "perspectiva #leo", "Suporte", "Atirador", Elo.MESTRE);
+            pessoa.adicionarPlayer("Roberto Neto", "10/12/2002", "Minazuki #br3", "Mid", "Atirador", Elo.MESTRE);
+            pessoa.adicionarPlayer("Endy Alexandre", "25/08/2001", "Dyne #br1", "Jungle", "Top", Elo.MESTRE);
+            pessoa.adicionarPlayer("Lucas Tarzan", "15/07/2003", "Tarzan Sergipano #br1", "Top", "Jungle", Elo.CHALLENGER);
+            pessoa.buscaAllPlayers();
 
-        System.out.println(c.buscaPlayerNick("dr yam #DRS"));
-        System.out.println(c.buscaPlayerNome("Endy alexandre"));
-        c.removerPlayerNick("Minazuki #BR3");
-        c.removerPlayerNome("Leonardo");
+            pessoa.atualizaPlayer(0, "Yan Victor", "10/02/2003", "dr Yam #drs", "Atirador", "Suporte", Elo.CHALLENGER);
+            pessoa.atualizaPlayerPorNick("Dyne #br1", "Endy Alexandre", "25/08/2001", "Dyne #br1", "Jungle", "Top", Elo.FERRO);
+            pessoa.atualizaPlayerPorNome("Lucas Tarzan", "Lucas Tarzan", "15/07/2003", "Tarzan Sergipano #br1", "Top", "Jungle", Elo.BRONZE);
 
-        c.adicionarPlayer("Lucas Tarzan", "15/07/2003", "Tarzan Sergipano br1", "Top", "Jungle", Elo.CHALLENGER);
+            System.out.println(pessoa.buscaPlayerNick("dr yam #DRS"));
+            System.out.println(pessoa.buscaPlayerNome("Endy alexandre"));
+            pessoa.removerPlayerNick("Minazuki #BR3");
+            pessoa.removerPlayerNome("Leonardo");
 
-        c.buscaAllPlayers();
+            System.out.println(pessoa.buscaPlayerNick("dr yam #drs").toString_2());
 
-        System.out.println(c.buscaPlayerNick("dr yam #drs").toString_2());
+            pessoa.adicionarPlayer("Lucas Tarzan", "15/07/2003", "Tarzan Sergipano br1", "Top", "Jungle", Elo.CHALLENGER);
+
+
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        } finally {
+            pessoa.buscaAllPlayers();
+        }
+
 
         
     }

@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import entidades_enum.Elo;
 import services.ValidadorDeNick;
@@ -12,17 +13,19 @@ import services.ValidadorDeNickDefault;
 public class Pessoa {
     private String nome;
     private LocalDate dataNasc;
-
     @NickName
     private String nickName;
     private String role1;
     private String role2;
     private Elo peakElo;
-
     private int idade;
     private DateTimeFormatter frmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+    Pessoa p;
+    private CopyOnWriteArrayList<Pessoa> pessoas = new CopyOnWriteArrayList<>();
+    private LocalDate dataFormatada;
     private ValidadorDeNick validador = new ValidadorDeNickDefault();
+
+    
     public Pessoa() {
     }
 
@@ -32,7 +35,7 @@ public class Pessoa {
         if (validarNick(nickName)) {
             this.nickName = nickName;
         } else {
-            throw new IllegalArgumentException("Nickname " + nickName + "inválido!");
+            throw new IllegalArgumentException("Nickname " + nickName + " inválido!");
         }
 
         this.role1 = role1;
@@ -41,65 +44,14 @@ public class Pessoa {
         this.idade = Period.between(dataNasc, LocalDate.now()).getYears();
     }
 
-    public int getIdade() {
-        return idade;
-    }
-
-    public void setIdade(int idade) {
-        this.idade = idade;
-    }
-
     public String getNome() {
         return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public LocalDate getDataNasc() {
-        return dataNasc;
-    }
-
-    public void setDataNasc(LocalDate dataNasc) {
-        this.dataNasc = dataNasc;
     }
 
     public String getNickName() {
         return nickName;
     }
 
-    public void setNickName(String nickName) {
-        if (validarNick(nickName)){
-            this.nickName = nickName;
-        } else{
-            throw new IllegalArgumentException("Nickname " + nickName + " inválido!");
-        }
-    }
-
-    public String getRole1() {
-        return role1;
-    }
-
-    public void setRole1(String role1) {
-        this.role1 = role1;
-    }
-
-    public String getRole2() {
-        return role2;
-    }
-
-    public void setRole2(String role2) {
-        this.role2 = role2;
-    }
-
-    public Elo getPeakElo() {
-        return peakElo;
-    }
-
-    public void setPeakElo(Elo peakElo) {
-        this.peakElo = peakElo;
-    }
 
     @Override
     public String toString() {
@@ -119,6 +71,106 @@ public class Pessoa {
 
     public boolean validarNick(String nickName) {
         return validador.validar(nickName);
+    }
+
+
+    // Adicionar player
+    public void adicionarPlayer(String nome, String dataNasc, String nickName, String role1, String role2,
+                                Elo peakElo) {
+        dataFormatada = LocalDate.parse(dataNasc, frmt);
+        Pessoa p = new Pessoa(nome, dataFormatada, nickName, role1, role2, peakElo);
+        pessoas.add(p);
+        System.out.println("Player adicionado!");
+
+    }
+
+    // Metodos de remover players
+    public void removerPlayerNick(String nickName) {
+        Pessoa encontrada = buscaPlayerNick(nickName);
+        if (encontrada != null) {
+            pessoas.remove(encontrada);
+            System.out.println("Player com nick " + nickName + " removido com sucesso!");
+        } else {
+            System.out.println("Player não foi encontrado!");
+        }
+
+    }
+
+    public void removerPlayerNome(String nome) {
+        Pessoa encontrada = buscaPlayerNome(nome);
+        if (encontrada != null) {
+            pessoas.remove(encontrada);
+            System.out.println("Player com nome " + nome + " removido com sucesso!");
+        } else {
+            System.out.println("Player não foi encontrado!");
+        }
+
+    }
+
+    // Metodos de atualizar players
+    public Pessoa atualizaPlayer(int indice, String nome, String dataNasc, String nickName, String role1, String role2,
+                                 Elo peakElo) {
+        dataFormatada = LocalDate.parse(dataNasc, frmt);
+        p = new Pessoa(nome, dataFormatada, nickName, role1, role2, peakElo);
+        pessoas.set(indice, p);
+        return p;
+    }
+
+    private Pessoa atualizaPlayer(int indice, Pessoa pe) {
+        pessoas.set(indice, pe);
+        return pe;
+    }
+
+    public Pessoa atualizaPlayerPorNome(String nome, String newNome, String dataNasc, String nickName, String role1,
+                                        String role2, Elo peakElo) {
+        dataFormatada = LocalDate.parse(dataNasc, frmt);
+        p = new Pessoa(newNome, dataFormatada, nickName, role1, role2, peakElo);
+        Pessoa encontrada = buscaPlayerNome(nome);
+        if (encontrada != null) {
+            int indice = pessoas.indexOf(encontrada);
+            atualizaPlayer(indice, p);
+            return p;
+        }
+        return null;
+    }
+
+    public Pessoa atualizaPlayerPorNick(String nick, String nome, String dataNasc, String newNick, String role1,
+                                        String role2, Elo peakElo) {
+        dataFormatada = LocalDate.parse(dataNasc, frmt);
+        p = new Pessoa(nome, dataFormatada, newNick, role1, role2, peakElo);
+        Pessoa encontrada = buscaPlayerNick(nick);
+        if (encontrada != null) {
+            int indice = pessoas.indexOf(encontrada);
+            atualizaPlayer(indice, p);
+            return p;
+        }
+        return null;
+    }
+
+    // Metodos de buscar players
+    public Pessoa buscaPlayerNick(String nickname) {
+        for (Pessoa pessoa : pessoas) {
+            if (pessoa.getNickName().equalsIgnoreCase(nickname)) {
+                return pessoa;
+            }
+        }
+        return null;
+    }
+
+    public Pessoa buscaPlayerNome(String nome) {
+        for (Pessoa pessoa : pessoas) {
+            if (pessoa.getNome().equalsIgnoreCase(nome)) {
+                return pessoa;
+            }
+        }
+        return null;
+    }
+
+    public Pessoa buscaAllPlayers() {
+        for (Pessoa pessoa : pessoas) {
+            System.out.println(pessoa);
+        }
+        return null;
     }
 
 }
