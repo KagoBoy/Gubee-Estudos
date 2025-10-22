@@ -3,10 +3,7 @@ package entidades;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-
 import entidades_enum.Elo;
-import services.ValidadorDeNick;
-import services.ValidadorDeNickDefault;
 
 public class Pessoa {
     private String nome;
@@ -19,7 +16,7 @@ public class Pessoa {
     private int idade;
     private DateTimeFormatter frmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     
-    private ValidadorDeNick validador = new ValidadorDeNickDefault();
+    
 
     
     public Pessoa() {
@@ -28,12 +25,7 @@ public class Pessoa {
     public Pessoa(String nome, LocalDate dataNasc, String nickName, String role1, String role2, Elo peakElo) {
         this.nome = nome;
         this.dataNasc = dataNasc;
-        if (validarNick(nickName)) {
-            this.nickName = nickName;
-        } else {
-            throw new IllegalArgumentException("Nickname " + nickName + " inválido!");
-        }
-
+        this.nickName = nickName;
         this.role1 = role1;
         this.role2 = role2;
         this.peakElo = peakElo;
@@ -47,6 +39,7 @@ public class Pessoa {
     public String getNickName() {
         return nickName;
     }
+
 
 
     @Override
@@ -65,8 +58,5 @@ public class Pessoa {
         return sb.toString();
     }
 
-    public boolean validarNick(String nickName) {
-        return validador.validar(nickName);
-    }
    
 }
