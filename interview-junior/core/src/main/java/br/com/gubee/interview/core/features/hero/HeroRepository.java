@@ -1,6 +1,7 @@
 package br.com.gubee.interview.core.features.hero;
 
 import br.com.gubee.interview.core.exception.HeroNotFoundException;
+import br.com.gubee.interview.core.features.interfaces.IHeroRepository;
 import br.com.gubee.interview.model.Hero;
 import br.com.gubee.interview.model.enums.Race;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-public class HeroRepository {
+public class HeroRepository implements IHeroRepository{
 
     
 
@@ -44,6 +45,7 @@ public class HeroRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    @Override
     public UUID create(Hero hero) {
         final Map<String, Object> params = Map.of("name", hero.getName(),
                 "race", hero.getRace().name(),
@@ -55,6 +57,7 @@ public class HeroRepository {
                 UUID.class);
     }
 
+    @Override
     public void updateById(Hero hero, UUID id) {
         final Map<String, Object> params = Map.of("name", hero.getName(),
                 "race", hero.getRace().name(),
@@ -64,6 +67,7 @@ public class HeroRepository {
         namedParameterJdbcTemplate.update(UPDATE_HERO_ID_QUERY, params);
     }
 
+    @Override
     public void updateByName(Hero hero, String name) {
         final Map<String, Object> params = Map.of("name", hero.getName(),
                 "race", hero.getRace().name(),
@@ -73,6 +77,7 @@ public class HeroRepository {
         namedParameterJdbcTemplate.update(UPDATE_HERO_NAME_QUERY, params);
     }
 
+    @Override
     public void deleteById(UUID id) {
         final Map<String, Object> params = Map.of("id", id);
         int rowsAffected = namedParameterJdbcTemplate.update(DELETE_HERO_ID_QUERY, params);
@@ -82,6 +87,7 @@ public class HeroRepository {
         }
     }
 
+    @Override
     public void deleteByName(String name) {
         final Map<String, Object> params = Map.of("name", name);
         int rowsAffected = namedParameterJdbcTemplate.update(DELETE_HERO_NAME_QUERY, params);
@@ -91,6 +97,7 @@ public class HeroRepository {
         }
     }
 
+    @Override
     public Optional<Hero> findByName(String name) {
         final Map<String, Object> params = Map.of("name", name);
 
@@ -113,7 +120,7 @@ public class HeroRepository {
     }
 
     
-
+    @Override
     public Optional<Hero> findById(UUID id) {
         final Map<String, Object> params = Map.of("id", id);
 

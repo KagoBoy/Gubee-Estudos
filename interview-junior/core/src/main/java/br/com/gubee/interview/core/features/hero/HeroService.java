@@ -1,7 +1,9 @@
 package br.com.gubee.interview.core.features.hero;
 
 import br.com.gubee.interview.core.exception.HeroNotFoundException;
+import br.com.gubee.interview.core.features.interfaces.IHeroService;
 import br.com.gubee.interview.core.features.powerstats.PowerStatsRepository;
+import br.com.gubee.interview.core.features.powerstats.PowerStatsService;
 import br.com.gubee.interview.model.ComparisonResponse;
 import br.com.gubee.interview.model.Hero;
 import br.com.gubee.interview.model.HeroResponse;
@@ -18,12 +20,13 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class HeroService {
+public class HeroService implements IHeroService{
 
         private final HeroRepository heroRepository;
         private final PowerStatsRepository powerStatsRepository;
 
         @Transactional
+        @Override
         public UUID create(CreateHeroRequest createHeroRequest) {
                 PowerStats powerStats = PowerStats.builder()
                                 .strength(createHeroRequest.getStrength())
@@ -45,6 +48,7 @@ public class HeroService {
         }
 
         @Transactional
+        @Override
         public Hero updateById(CreateHeroRequest createHeroRequest, UUID id) {
 
                 Hero existingHero = heroRepository.findById(id)
@@ -74,6 +78,7 @@ public class HeroService {
         }
 
         @Transactional
+        @Override
         public Hero updateByName(CreateHeroRequest createHeroRequest, String name) {
 
                 Hero existingHero = heroRepository.findByName(name)
@@ -103,15 +108,18 @@ public class HeroService {
         }
 
         @Transactional
+        @Override
         public void deleteById(UUID id) {
                 heroRepository.deleteById(id);
         }
 
         @Transactional
+        @Override
         public void deleteByName(String name) {
                 heroRepository.deleteByName(name);
         }
 
+        @Override
         public HeroResponse findByName(String name) {
                 Optional<Hero> heroOpt = heroRepository.findByName(name);
                 if (heroOpt.isPresent()) {
@@ -131,6 +139,7 @@ public class HeroService {
                 }
         }
 
+        @Override
         public HeroResponse findById(UUID id) {
                 Optional<Hero> heroOpt = heroRepository.findById(id);
                 if (heroOpt.isPresent()) {
@@ -150,6 +159,7 @@ public class HeroService {
                 }
         }
 
+        @Override
         public ComparisonResponse compareHeroes(UUID hero1Id, UUID hero2Id) {
                 Hero hero1 = heroRepository.findById(hero1Id)
                                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id: " + hero1Id));
