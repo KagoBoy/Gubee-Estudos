@@ -50,13 +50,13 @@ public class HeroController {
         return ResponseEntity.ok(hero);
     }
 
-    @DeleteMapping(value = "/delete/{id}")
+    @DeleteMapping(value = "/delete/id/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable UUID id){
         heroService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/delete/{name}")
+    @DeleteMapping(value = "/delete/name/{name}")
     public ResponseEntity<Void> deleteById(@PathVariable String name){
         heroService.deleteByName(name);
         return ResponseEntity.noContent().build();

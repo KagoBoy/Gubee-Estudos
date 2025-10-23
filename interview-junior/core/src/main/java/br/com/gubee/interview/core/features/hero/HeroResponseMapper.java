@@ -1,11 +1,14 @@
 package br.com.gubee.interview.core.features.hero;
 
+import org.springframework.stereotype.Service;
+
 import br.com.gubee.interview.core.features.powerstats.PowerStatsRepository;
 import br.com.gubee.interview.model.Hero;
 import br.com.gubee.interview.model.HeroResponse;
 import br.com.gubee.interview.model.PowerStats;
 import lombok.RequiredArgsConstructor;
 
+@Service
 @RequiredArgsConstructor
 public class HeroResponseMapper {
     private final PowerStatsRepository powerStatsRepository;
