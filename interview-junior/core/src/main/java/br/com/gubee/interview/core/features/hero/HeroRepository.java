@@ -3,7 +3,6 @@ package br.com.gubee.interview.core.features.hero;
 import br.com.gubee.interview.core.exception.HeroNotFoundException;
 import br.com.gubee.interview.core.features.interfaces.IHeroRepository;
 import br.com.gubee.interview.model.Hero;
-import br.com.gubee.interview.model.enums.Race;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -17,6 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class HeroRepository implements IHeroRepository{
 
+    private final HeroRowMapper heroRowMapper;
     
 
     private static final String CREATE_HERO_QUERY = "INSERT INTO hero" +
@@ -105,14 +105,7 @@ public class HeroRepository implements IHeroRepository{
             Hero hero = namedParameterJdbcTemplate.queryForObject(
                     FIND_HERO_NAME_QUERY,
                     params,
-                    (rs, rowNum) -> Hero.builder()
-                            .id(rs.getObject("id", UUID.class))
-                            .name(rs.getString("name"))
-                            .race(Race.valueOf(rs.getString("race")))
-                            .powerStatsId(rs.getObject("power_stats_id", UUID.class))
-                            .createdAt(rs.getTimestamp("created_at").toInstant())
-                            .updatedAt(rs.getTimestamp("updated_at").toInstant())
-                            .build());
+                    heroRowMapper);
             return Optional.ofNullable(hero);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
@@ -128,14 +121,7 @@ public class HeroRepository implements IHeroRepository{
             Hero hero = namedParameterJdbcTemplate.queryForObject(
                     FIND_HERO_ID_QUERY,
                     params,
-                    (rs, rowNum) -> Hero.builder()
-                            .id(rs.getObject("id", UUID.class))
-                            .name(rs.getString("name"))
-                            .race(Race.valueOf(rs.getString("race")))
-                            .powerStatsId(rs.getObject("power_stats_id", UUID.class))
-                            .createdAt(rs.getTimestamp("created_at").toInstant())
-                            .updatedAt(rs.getTimestamp("updated_at").toInstant())
-                            .build());
+                    heroRowMapper);
             return Optional.ofNullable(hero);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
