@@ -1,5 +1,6 @@
 package br.com.gubee.interview.core.features.hero;
 
+import br.com.gubee.interview.core.features.interfaces.IHeroService;
 import br.com.gubee.interview.model.ComparisonResponse;
 import br.com.gubee.interview.model.Hero;
 import br.com.gubee.interview.model.HeroResponse;
@@ -21,7 +22,7 @@ import static org.springframework.http.ResponseEntity.created;
 @RequestMapping(value = "/api/v1/heroes", produces = APPLICATION_JSON_VALUE)
 public class HeroController {
 
-    private final HeroService heroService;
+    private final IHeroService heroService;
 
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)

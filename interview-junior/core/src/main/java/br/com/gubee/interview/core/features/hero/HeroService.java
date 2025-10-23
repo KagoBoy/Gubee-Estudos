@@ -1,6 +1,7 @@
 package br.com.gubee.interview.core.features.hero;
 
 import br.com.gubee.interview.core.exception.HeroNotFoundException;
+import br.com.gubee.interview.core.features.interfaces.IHeroRepository;
 import br.com.gubee.interview.core.features.interfaces.IHeroService;
 import br.com.gubee.interview.core.features.powerstats.PowerStatsRepository;
 import br.com.gubee.interview.model.ComparisonResponse;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class HeroService implements IHeroService {
 
-        private final HeroRepository heroRepository;
+        private final IHeroRepository heroRepository;
         private final PowerStatsRepository powerStatsRepository;
         private final HeroResponseMapper heroResponseMapper;
 
