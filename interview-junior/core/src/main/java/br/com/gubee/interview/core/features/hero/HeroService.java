@@ -3,7 +3,6 @@ package br.com.gubee.interview.core.features.hero;
 import br.com.gubee.interview.core.exception.HeroNotFoundException;
 import br.com.gubee.interview.core.features.interfaces.IHeroService;
 import br.com.gubee.interview.core.features.powerstats.PowerStatsRepository;
-import br.com.gubee.interview.core.features.powerstats.PowerStatsService;
 import br.com.gubee.interview.model.ComparisonResponse;
 import br.com.gubee.interview.model.Hero;
 import br.com.gubee.interview.model.HeroResponse;
@@ -15,34 +14,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class HeroService implements IHeroService{
+public class HeroService implements IHeroService {
 
         private final HeroRepository heroRepository;
         private final PowerStatsRepository powerStatsRepository;
+        private final HeroResponseMapper heroResponseMapper;
 
         @Transactional
         @Override
         public UUID create(CreateHeroRequest createHeroRequest) {
-                PowerStats powerStats = PowerStats.builder()
-                                .strength(createHeroRequest.getStrength())
-                                .agility(createHeroRequest.getAgility())
-                                .dexterity(createHeroRequest.getDexterity())
-                                .intelligence(createHeroRequest.getIntelligence())
-                                .build();
-
-                UUID powerStatsId = powerStatsRepository.create(powerStats);
-
-                // Cria o Hero com o powerStatsId
-                Hero hero = Hero.builder()
-                                .name(createHeroRequest.getName())
-                                .race(createHeroRequest.getRace())
-                                .powerStatsId(powerStatsId)
-                                .build();
+                UUID powerStatsId = powerStatsRepository.create(buildPowerStats(createHeroRequest));
+                Hero hero = buildHero(createHeroRequest, powerStatsId);
 
                 return heroRepository.create(hero);
         }
@@ -64,11 +50,7 @@ public class HeroService implements IHeroService{
 
                 powerStatsRepository.update(powerStats);
 
-                Hero hero = Hero.builder()
-                                .name(createHeroRequest.getName())
-                                .race(createHeroRequest.getRace())
-                                .powerStatsId(existingHero.getPowerStatsId())
-                                .build();
+                Hero hero = buildHero(createHeroRequest, existingHero.getPowerStatsId());
 
                 heroRepository.updateById(hero, id);
 
@@ -94,11 +76,7 @@ public class HeroService implements IHeroService{
 
                 powerStatsRepository.update(powerStats);
 
-                Hero hero = Hero.builder()
-                                .name(createHeroRequest.getName())
-                                .race(createHeroRequest.getRace())
-                                .powerStatsId(existingHero.getPowerStatsId())
-                                .build();
+                Hero hero = buildHero(createHeroRequest, existingHero.getPowerStatsId());
 
                 heroRepository.updateByName(hero, name);
 
@@ -121,42 +99,16 @@ public class HeroService implements IHeroService{
 
         @Override
         public HeroResponse findByName(String name) {
-                Optional<Hero> heroOpt = heroRepository.findByName(name);
-                if (heroOpt.isPresent()) {
-                        Hero hero = heroOpt.get();
-                        PowerStats powerStats = powerStatsRepository.findById(hero.getPowerStatsId());
-                        HeroResponse response = HeroResponse.builder()
-                                        .id(hero.getId())
-                                        .name(hero.getName())
-                                        .race(hero.getRace())
-                                        .powerStats(powerStats)
-                                        .createdAt(hero.getCreatedAt())
-                                        .updatedAt(hero.getUpdatedAt())
-                                        .build();
-                        return response;
-                } else {
-                        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Hero not found");
-                }
+                Hero hero = heroRepository.findByName(name)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hero not found"));
+                return heroResponseMapper.toResponse(hero);
         }
 
         @Override
         public HeroResponse findById(UUID id) {
-                Optional<Hero> heroOpt = heroRepository.findById(id);
-                if (heroOpt.isPresent()) {
-                        Hero hero = heroOpt.get();
-                        PowerStats powerStats = powerStatsRepository.findById(hero.getPowerStatsId());
-                        HeroResponse response = HeroResponse.builder()
-                                        .id(hero.getId())
-                                        .name(hero.getName())
-                                        .race(hero.getRace())
-                                        .powerStats(powerStats)
-                                        .createdAt(hero.getCreatedAt())
-                                        .updatedAt(hero.getUpdatedAt())
-                                        .build();
-                        return response;
-                } else {
-                        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Hero not found");
-                }
+                Hero hero = heroRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hero not found"));
+                return heroResponseMapper.toResponse(hero);
         }
 
         @Override
@@ -183,6 +135,23 @@ public class HeroService implements IHeroService{
                                 .agility(agilityDiff)
                                 .dexterity(dexterityDiff)
                                 .intelligence(intelligenceDiff)
+                                .build();
+        }
+
+        private PowerStats buildPowerStats(CreateHeroRequest request) {
+                return PowerStats.builder()
+                                .strength(request.getStrength())
+                                .agility(request.getAgility())
+                                .dexterity(request.getDexterity())
+                                .intelligence(request.getIntelligence())
+                                .build();
+        }
+
+        private Hero buildHero(CreateHeroRequest request, UUID powerStatsId) {
+                return Hero.builder()
+                                .name(request.getName())
+                                .race(request.getRace())
+                                .powerStatsId(powerStatsId)
                                 .build();
         }
 }
