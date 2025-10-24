@@ -2,6 +2,7 @@ package br.com.gubee.interview.core.features.hero;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -9,8 +10,17 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,7 +50,13 @@ public class HeroServicUnitTest {
         @InjectMocks
         private HeroService heroService;
 
-        
+        private Validator validator;
+
+        @BeforeEach
+        public void setUp() {
+                ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+                validator = factory.getValidator();
+        }
 
         @Test
         public void createHeroWithAllRequiredArguments() {
@@ -57,6 +73,23 @@ public class HeroServicUnitTest {
                 assertEquals(heroId, result);
 
         }
+
+        @Test
+        public void createWithoutPowerStats_ShouldReturnValidationMessage() {
+                Set<ConstraintViolation<CreateHeroRequest>> violations = validator
+                                .validate(createHeroRequestWithoutPowerStats());
+
+                List<String> errorMessages = violations.stream()
+                                .map(ConstraintViolation::getMessage)
+                                .toList();
+                assertTrue(errorMessages.contains("message.powerstats.strength.mandatory"));
+                assertTrue(errorMessages.contains("message.powerstats.agility.mandatory"));
+                assertTrue(errorMessages.contains("message.powerstats.dexterity.mandatory"));
+                assertTrue(errorMessages.contains("message.powerstats.intelligence.mandatory"));
+
+                assertEquals(4, violations.size());
+        }
+
 
         @Test
         public void updateByIdWithAllRequiredArguments() {
@@ -174,8 +207,7 @@ public class HeroServicUnitTest {
                                 .build();
                 when(heroRepository.findById(heroId)).thenReturn(Optional.of(existingHero));
                 when(heroResponseMapper.toResponse(existingHero)).thenReturn(heroResponse);
-                
-                
+
                 HeroResponse result = heroService.findById(heroId);
 
                 assertNotNull(result);
@@ -291,5 +323,18 @@ public class HeroServicUnitTest {
                                 .race(Race.HUMAN)
                                 .build();
         }
+
+        private CreateHeroRequest createHeroRequestWithoutPowerStats() {
+                return CreateHeroRequest.builder()
+                                .name("Batman")
+                                .strength(null)
+                                .agility(null)
+                                .dexterity(null)
+                                .intelligence(null)
+                                .race(Race.HUMAN)
+                                .build();
+        }
+
+        
 
 }
