@@ -34,8 +34,13 @@ public class HeroServicUnitTest {
         @Mock
         private HeroRepository heroRepository;
 
+        @Mock
+        private HeroResponseMapper heroResponseMapper;
+
         @InjectMocks
         private HeroService heroService;
+
+        
 
         @Test
         public void createHeroWithAllRequiredArguments() {
@@ -158,9 +163,19 @@ public class HeroServicUnitTest {
                                 .dexterity(7)
                                 .intelligence(9)
                                 .build();
-                when(heroRepository.findById(heroId)).thenReturn(Optional.of(existingHero));
-                when(powerStatsRepository.findById(powerStatsId)).thenReturn(powerStats);
 
+                HeroResponse heroResponse = HeroResponse.builder()
+                                .id(existingHero.getId())
+                                .name(existingHero.getName())
+                                .race(existingHero.getRace())
+                                .powerStats(powerStats)
+                                .createdAt(existingHero.getCreatedAt())
+                                .updatedAt(existingHero.getUpdatedAt())
+                                .build();
+                when(heroRepository.findById(heroId)).thenReturn(Optional.of(existingHero));
+                when(heroResponseMapper.toResponse(existingHero)).thenReturn(heroResponse);
+                
+                
                 HeroResponse result = heroService.findById(heroId);
 
                 assertNotNull(result);
@@ -190,8 +205,17 @@ public class HeroServicUnitTest {
                                 .dexterity(7)
                                 .intelligence(9)
                                 .build();
+
+                HeroResponse heroResponse = HeroResponse.builder()
+                                .id(existingHero.getId())
+                                .name(existingHero.getName())
+                                .race(existingHero.getRace())
+                                .powerStats(powerStats)
+                                .createdAt(existingHero.getCreatedAt())
+                                .updatedAt(existingHero.getUpdatedAt())
+                                .build();
                 when(heroRepository.findByName(findName)).thenReturn(Optional.of(existingHero));
-                when(powerStatsRepository.findById(powerStatsId)).thenReturn(powerStats);
+                when(heroResponseMapper.toResponse(existingHero)).thenReturn(heroResponse);
 
                 HeroResponse result = heroService.findByName(findName);
 
@@ -204,7 +228,7 @@ public class HeroServicUnitTest {
         }
 
         @Test
-        public void ComparisonResponseTest(){
+        public void ComparisonResponseTest() {
                 UUID hero1Id = UUID.randomUUID();
                 UUID powerStats1Id = UUID.randomUUID();
                 UUID hero2Id = UUID.randomUUID();
@@ -216,7 +240,7 @@ public class HeroServicUnitTest {
                                 .race(Race.CYBORG)
                                 .powerStatsId(powerStats1Id)
                                 .build();
-                
+
                 Hero hero2 = Hero.builder()
                                 .id(hero2Id)
                                 .name("Superman")
@@ -246,7 +270,6 @@ public class HeroServicUnitTest {
                 when(powerStatsRepository.findById(powerStats2Id)).thenReturn(powerStats2);
 
                 ComparisonResponse result = heroService.compareHeroes(hero1Id, hero2Id);
-
 
                 assertNotNull(result);
                 assertEquals(8, result.getStrength());
