@@ -105,6 +105,14 @@ public class HeroServicUnitTest {
                 assertEquals(3, violations.size());
         }
 
+        @Test
+        public void createRequestWithAllArguments() {
+                Set<ConstraintViolation<CreateHeroRequest>> violations = validator
+                                .validate(createHeroRequest());
+
+                assertEquals(0, violations.size());
+        }
+
 
 
         @Test
