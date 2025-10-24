@@ -90,6 +90,22 @@ public class HeroServicUnitTest {
                 assertEquals(4, violations.size());
         }
 
+        @Test
+        public void createWithoutHeroAttributes_ShouldReturnValidationMessage() {
+                Set<ConstraintViolation<CreateHeroRequest>> violations = validator
+                                .validate(createHeroRequestWithoutHeroAttributes());
+
+                List<String> errorMessages = violations.stream()
+                                .map(ConstraintViolation::getMessage)
+                                .toList();
+                assertTrue(errorMessages.contains("message.name.mandatory"));
+                assertTrue(errorMessages.contains("message.race.mandatory"));
+                assertTrue(errorMessages.contains("message.name.length"));
+
+                assertEquals(3, violations.size());
+        }
+
+
 
         @Test
         public void updateByIdWithAllRequiredArguments() {
@@ -335,6 +351,15 @@ public class HeroServicUnitTest {
                                 .build();
         }
 
-        
+        private CreateHeroRequest createHeroRequestWithoutHeroAttributes() {
+                return CreateHeroRequest.builder()
+                                .name("")
+                                .agility(5)
+                                .dexterity(8)
+                                .strength(6)
+                                .intelligence(10)
+                                .race(null)
+                                .build();
+        }
 
 }
