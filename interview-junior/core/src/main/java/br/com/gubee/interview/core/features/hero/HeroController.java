@@ -24,7 +24,6 @@ public class HeroController {
 
     private final IHeroService heroService;
 
-
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> create(@Validated
                                        @RequestBody CreateHeroRequest createHeroRequest) {
@@ -36,7 +35,7 @@ public class HeroController {
     public ResponseEntity<Hero> updateById(@Validated
                                            @RequestBody CreateHeroRequest createHeroRequest, @PathVariable UUID id) {
         Hero hero = heroService.updateById(createHeroRequest, id);
-        return ResponseEntity.ok(hero);
+        return ResponseEntity.ok(hero);                                  
     }
 
     @GetMapping(value = "/name/{name}")
@@ -52,20 +51,20 @@ public class HeroController {
     }
 
     @DeleteMapping(value = "/delete/id/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable UUID id){
+    public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
         heroService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/delete/name/{name}")
-    public ResponseEntity<Void> deleteById(@PathVariable String name){
+    public ResponseEntity<Void> deleteById(@PathVariable String name) {
         heroService.deleteByName(name);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping(value = "/compare")
     public ResponseEntity<ComparisonResponse> compareHeroes(@RequestParam UUID hero1Id,
-                                                            @RequestParam UUID hero2Id) {
+            @RequestParam UUID hero2Id) {
         ComparisonResponse comparison = heroService.compareHeroes(hero1Id, hero2Id);
         return ResponseEntity.ok(comparison);
     }

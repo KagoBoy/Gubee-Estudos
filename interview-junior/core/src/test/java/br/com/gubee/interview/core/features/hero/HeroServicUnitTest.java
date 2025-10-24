@@ -2,6 +2,7 @@ package br.com.gubee.interview.core.features.hero;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -27,6 +28,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import br.com.gubee.interview.core.exception.HeroNotFoundException;
 import br.com.gubee.interview.core.features.powerstats.PowerStatsRepository;
 import br.com.gubee.interview.model.ComparisonResponse;
 import br.com.gubee.interview.model.Hero;
@@ -146,6 +148,21 @@ public class HeroServicUnitTest {
                 assertEquals(heroId, result.getId());
                 assertEquals("Lanterna Verde", result.getName());
                 assertEquals(Race.ALIEN, result.getRace());
+        }
+
+
+        @Test
+        public void updateByIdWithIdIncorrect() {
+                UUID heroId = UUID.randomUUID();
+
+                when(heroRepository.findById(heroId)).thenReturn(Optional.empty());
+
+                HeroNotFoundException exception = assertThrows(HeroNotFoundException.class, 
+                () -> heroService.updateById(createHeroRequest(), heroId));
+
+                String expected = "Hero not found with id: " + heroId;
+
+                assertEquals(expected, exception.getMessage());
         }
 
         @Test
