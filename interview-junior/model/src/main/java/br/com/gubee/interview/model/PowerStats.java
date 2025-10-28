@@ -36,55 +36,34 @@ public class PowerStats {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public int getStrength() {
         return strength;
     }
 
-    public void setStrength(int strength) {
-        this.strength = strength;
-    }
 
     public int getAgility() {
         return agility;
     }
 
-    public void setAgility(int agility) {
-        this.agility = agility;
-    }
 
     public int getDexterity() {
         return dexterity;
     }
 
-    public void setDexterity(int dexterity) {
-        this.dexterity = dexterity;
-    }
 
     public int getIntelligence() {
         return intelligence;
     }
 
-    public void setIntelligence(int intelligence) {
-        this.intelligence = intelligence;
-    }
 
     public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
 
     public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }
