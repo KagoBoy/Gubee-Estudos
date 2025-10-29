@@ -1,12 +1,12 @@
-package br.com.gubee.interview.core.domain.services;
+package br.com.gubee.interview.core.domain.services.hero;
 
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import br.com.gubee.interview.core.domain.ports.in.createService;
-import br.com.gubee.interview.core.domain.ports.out.createRepository;
-import br.com.gubee.interview.core.features.powerstats.PowerStatsRepository;
+import br.com.gubee.interview.core.domain.ports.in.CreateService;
+import br.com.gubee.interview.core.domain.ports.out.CreateRepository;
+
 import br.com.gubee.interview.model.Hero;
 import br.com.gubee.interview.model.PowerStats;
 import br.com.gubee.interview.model.request.CreateHeroRequest;
@@ -14,14 +14,14 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class createHeroService implements createService<CreateHeroRequest> {
+public class CreateHeroService implements CreateService<CreateHeroRequest> {
 
-    private final PowerStatsRepository powerStatsRepository;
-    private final createRepository<Hero> createHeroRepository;
+    private final CreateRepository<PowerStats> createPowerStatsRepository;
+    private final CreateRepository<Hero> createHeroRepository;
 
     @Override
     public UUID create(CreateHeroRequest createHeroRequest) {
-        UUID powerStatsId = powerStatsRepository.create(buildPowerStats(createHeroRequest));
+        UUID powerStatsId = createPowerStatsRepository.create(buildPowerStats(createHeroRequest));
         Hero hero = buildHero(createHeroRequest, powerStatsId);
 
         return createHeroRepository.create(hero);

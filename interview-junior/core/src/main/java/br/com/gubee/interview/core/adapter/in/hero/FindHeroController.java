@@ -1,4 +1,4 @@
-package br.com.gubee.interview.core.adapter.in;
+package br.com.gubee.interview.core.adapter.in.hero;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.gubee.interview.core.domain.ports.in.findService;
+import br.com.gubee.interview.core.domain.ports.in.FindService;
 import br.com.gubee.interview.model.HeroResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/heroes", produces = APPLICATION_JSON_VALUE)
-public class findHeroController {
-    private final findService<HeroResponse> findHeroService;
+public class FindHeroController {
+    private final FindService<HeroResponse> findHeroService;
 
     @GetMapping(value = "/name/{name}")
     public ResponseEntity<HeroResponse> findByName(@PathVariable String name) {

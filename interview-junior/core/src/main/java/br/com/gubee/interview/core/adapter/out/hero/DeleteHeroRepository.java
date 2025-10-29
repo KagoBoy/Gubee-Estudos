@@ -1,4 +1,4 @@
-package br.com.gubee.interview.core.adapter.out;
+package br.com.gubee.interview.core.adapter.out.hero;
 
 import java.util.Map;
 import java.util.UUID;
@@ -6,13 +6,13 @@ import java.util.UUID;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import br.com.gubee.interview.core.domain.ports.out.deleteRepository;
+import br.com.gubee.interview.core.domain.ports.out.DeleteRepository;
 import br.com.gubee.interview.core.exception.HeroNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class deleteHeroRepository implements deleteRepository{
+public class DeleteHeroRepository implements DeleteRepository{
 
     private static final String DELETE_HERO_NAME_QUERY = "DELETE FROM hero" +
             " WHERE name = :name";

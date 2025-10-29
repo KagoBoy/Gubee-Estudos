@@ -1,4 +1,4 @@
-package br.com.gubee.interview.core.adapter.in;
+package br.com.gubee.interview.core.adapter.in.hero;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.gubee.interview.core.domain.ports.in.deleteService;
+import br.com.gubee.interview.core.domain.ports.in.DeleteService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/heroes", produces = APPLICATION_JSON_VALUE)
-public class deleteHeroController {
-    private final deleteService deleteHeroService;
+public class DeleteHeroController {
+    private final DeleteService deleteHeroService;
 
     @DeleteMapping(value = "/delete/id/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable UUID id) {

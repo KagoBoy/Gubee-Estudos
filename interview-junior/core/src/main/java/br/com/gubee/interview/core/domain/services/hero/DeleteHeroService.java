@@ -1,19 +1,19 @@
-package br.com.gubee.interview.core.domain.services;
+package br.com.gubee.interview.core.domain.services.hero;
 
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.gubee.interview.core.domain.ports.in.deleteService;
-import br.com.gubee.interview.core.domain.ports.out.deleteRepository;
+import br.com.gubee.interview.core.domain.ports.in.DeleteService;
+import br.com.gubee.interview.core.domain.ports.out.DeleteRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class deleteHeroService implements deleteService {
+public class DeleteHeroService implements DeleteService {
 
-    private final deleteRepository deleteHeroRepository;
+    private final DeleteRepository deleteHeroRepository;
 
     @Transactional
     @Override

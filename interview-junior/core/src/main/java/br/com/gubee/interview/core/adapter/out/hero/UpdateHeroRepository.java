@@ -1,4 +1,4 @@
-package br.com.gubee.interview.core.adapter.out;
+package br.com.gubee.interview.core.adapter.out.hero;
 
 import java.util.Map;
 import java.util.UUID;
@@ -6,13 +6,13 @@ import java.util.UUID;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import br.com.gubee.interview.core.domain.ports.out.updateRepository;
+import br.com.gubee.interview.core.domain.ports.out.UpdateRepository;
 import br.com.gubee.interview.model.Hero;
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class updateHeroRepository implements updateRepository<Hero>{
+public class UpdateHeroRepository implements UpdateRepository<Hero>{
 
     private static final String UPDATE_HERO_ID_QUERY = "UPDATE hero" +
             " SET name = :name, race = :race, power_stats_id = :powerStatsId" +

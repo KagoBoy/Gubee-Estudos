@@ -1,8 +1,8 @@
-package br.com.gubee.interview.core.domain.services;
+package br.com.gubee.interview.core.domain.services.hero;
 
 import org.springframework.stereotype.Service;
 
-import br.com.gubee.interview.core.features.powerstats.PowerStatsRepository;
+import br.com.gubee.interview.core.domain.ports.out.FindRepository;
 import br.com.gubee.interview.model.Hero;
 import br.com.gubee.interview.model.HeroResponse;
 import br.com.gubee.interview.model.PowerStats;
@@ -11,10 +11,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class HeroResponseMapper {
-    private final PowerStatsRepository powerStatsRepository;
+    private final FindRepository<PowerStats> findPowerStatsRepository;
 
     public HeroResponse toResponse (Hero hero){
-        PowerStats powerStats = powerStatsRepository.findById(hero.getPowerStatsId());
+        PowerStats powerStats = findPowerStatsRepository.findById(hero.getPowerStatsId());
 
         return HeroResponse.builder()
             .id(hero.getId())

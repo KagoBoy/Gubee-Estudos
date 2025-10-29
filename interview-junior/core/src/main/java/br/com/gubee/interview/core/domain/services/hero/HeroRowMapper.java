@@ -1,4 +1,4 @@
-package br.com.gubee.interview.core.domain.services;
+package br.com.gubee.interview.core.domain.services.hero;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

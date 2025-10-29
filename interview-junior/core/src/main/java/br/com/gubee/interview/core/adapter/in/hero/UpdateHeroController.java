@@ -1,4 +1,4 @@
-package br.com.gubee.interview.core.adapter.in;
+package br.com.gubee.interview.core.adapter.in.hero;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.gubee.interview.core.domain.ports.in.updateService;
+import br.com.gubee.interview.core.domain.ports.in.UpdateService;
 import br.com.gubee.interview.model.Hero;
 import br.com.gubee.interview.model.request.CreateHeroRequest;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +20,9 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/heroes", produces = APPLICATION_JSON_VALUE)
-public class updateHeroController {
+public class UpdateHeroController {
 
-    private final updateService<CreateHeroRequest, Hero> updateHeroService;
+    private final UpdateService<CreateHeroRequest, Hero> updateHeroService;
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE, value = "/update/{id}")
     public ResponseEntity<Hero> updateById(@Validated

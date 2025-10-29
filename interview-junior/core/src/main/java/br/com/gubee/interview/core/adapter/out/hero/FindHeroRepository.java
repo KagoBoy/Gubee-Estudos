@@ -1,4 +1,4 @@
-package br.com.gubee.interview.core.adapter.out;
+package br.com.gubee.interview.core.adapter.out.hero;
 
 import java.util.Map;
 import java.util.Optional;
@@ -8,14 +8,14 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import br.com.gubee.interview.core.domain.ports.out.findRepository;
-import br.com.gubee.interview.core.domain.services.HeroRowMapper;
+import br.com.gubee.interview.core.domain.ports.out.FindRepository;
+import br.com.gubee.interview.core.domain.services.hero.HeroRowMapper;
 import br.com.gubee.interview.model.Hero;
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class findHeroRepository implements findRepository<Optional<Hero>>{
+public class FindHeroRepository implements FindRepository<Optional<Hero>>{
 
     private final HeroRowMapper heroRowMapper;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;

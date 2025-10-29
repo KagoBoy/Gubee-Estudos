@@ -1,4 +1,4 @@
-package br.com.gubee.interview.core.domain.services;
+package br.com.gubee.interview.core.domain.services.hero;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -7,17 +7,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.gubee.interview.core.domain.ports.in.findService;
-import br.com.gubee.interview.core.domain.ports.out.findRepository;
+import br.com.gubee.interview.core.domain.ports.in.FindService;
+import br.com.gubee.interview.core.domain.ports.out.FindRepository;
 import br.com.gubee.interview.model.Hero;
 import br.com.gubee.interview.model.HeroResponse;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class findHeroService implements findService<HeroResponse> {
+public class FindHeroService implements FindService<HeroResponse> {
 
-    private final findRepository<Optional<Hero>> findHeroRepository;
+    private final FindRepository<Optional<Hero>> findHeroRepository;
     private final HeroResponseMapper heroResponseMapper;
 
     @Override
