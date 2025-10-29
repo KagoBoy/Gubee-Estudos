@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import br.com.gubee.interview.core.domain.ports.out.findRepository;
-import br.com.gubee.interview.core.features.hero.HeroRowMapper;
+import br.com.gubee.interview.core.domain.services.HeroRowMapper;
 import br.com.gubee.interview.model.Hero;
 import lombok.RequiredArgsConstructor;
 
