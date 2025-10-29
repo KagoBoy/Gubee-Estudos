@@ -31,7 +31,7 @@ public class UpdateHeroService implements UpdateService<CreateHeroRequest, Hero>
                                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id: " + id));
 
                 PowerStats powerStats = buildPowerStats(createHeroRequest, existingHero);
-                updatePowerStatsRepository.updateById(powerStats, existingHero.getId());
+                updatePowerStatsRepository.updateById(powerStats, existingHero.getPowerStatsId());
 
                 Hero hero = buildHero(createHeroRequest, existingHero.getPowerStatsId());
 
@@ -51,7 +51,7 @@ public class UpdateHeroService implements UpdateService<CreateHeroRequest, Hero>
 
                 PowerStats powerStats = buildPowerStats(createHeroRequest, existingHero);
 
-                updatePowerStatsRepository.updateById(powerStats, existingHero.getId());
+                updatePowerStatsRepository.updateById(powerStats, existingHero.getPowerStatsId());
 
                 Hero hero = buildHero(createHeroRequest, existingHero.getPowerStatsId());
 
@@ -64,7 +64,7 @@ public class UpdateHeroService implements UpdateService<CreateHeroRequest, Hero>
 
         private PowerStats buildPowerStats(CreateHeroRequest request, Hero existingHero) {
                 return PowerStats.builder()
-                                .id(existingHero.getId())
+                                .id(existingHero.getPowerStatsId())
                                 .strength(request.getStrength())
                                 .agility(request.getAgility())
                                 .dexterity(request.getDexterity())
