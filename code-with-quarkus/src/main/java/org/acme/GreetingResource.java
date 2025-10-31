@@ -2,8 +2,8 @@ package org.acme;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+
 import org.eclipse.microprofile.faulttolerance.Retry;
-import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.jboss.logging.Logger;
 
 import jakarta.ws.rs.GET;
