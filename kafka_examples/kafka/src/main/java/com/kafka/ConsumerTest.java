@@ -46,7 +46,12 @@ public class ConsumerTest {
                 for (ConsumerRecord<String, String> record : records){
                     String key = record.key();
                     String value = record.value();
-                    System.out.println(String.format("Evento consumido do topico %s: chave = %-10s valor = %s", topic, key, value));
+                    System.out.println(String.format("[Thread %-10s] Evento consumido do topico %s: chave = %-10s valor = %s", Thread.currentThread().getName(), topic, key, value));
+                    try {
+                        Thread.sleep(1000); 
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
