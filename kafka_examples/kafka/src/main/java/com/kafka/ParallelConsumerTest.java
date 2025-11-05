@@ -14,10 +14,14 @@ import static org.apache.kafka.clients.consumer.ConsumerConfig.*;
 
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.UUID;
 
 public class ParallelConsumerTest {
 
     public static void main(String[] args) {
+
+        final UUID consumerId = UUID.randomUUID();
+
         final Properties props = new Properties() {
             {
                 put(BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -29,7 +33,7 @@ public class ParallelConsumerTest {
             }
         };
 
-        final String topic = "topic_0";
+        final String topic = "topic_8";
 
         try (final Consumer<String, String> consumer = new KafkaConsumer<>(props)) {
 
@@ -48,8 +52,8 @@ public class ParallelConsumerTest {
                 eosStreamProcessor.poll(context -> {
                     var record = context.getSingleConsumerRecord();
                     System.out.printf(
-                            "[Thread: %-10s] Evento consumido do topico %-10s chave = %-10s valor = %-10s particao = %-2d offset = %-5d%n",
-                            Thread.currentThread().getName(), record.topic(), record.key(), record.value(),
+                            "[Thread: %-10s, Consumer: %s] Evento consumido do topico %-10s chave = %-10s valor = %-10s particao = %-2d offset = %-5d%n",
+                            Thread.currentThread().getName(), consumerId, record.topic(), record.key(), record.value(),
                             record.partition(), record.offset());
                             try {
                                 Thread.sleep(1000);

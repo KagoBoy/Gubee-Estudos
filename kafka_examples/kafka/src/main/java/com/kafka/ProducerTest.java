@@ -28,10 +28,15 @@ public class ProducerTest {
 
         try (AdminClient adminClient = AdminClient.create(adminProps)) {
 
+            // if (topicExists(adminClient, topicName)) {
+            //     adminClient.deleteTopics(Collections.singletonList(topicName));
+            //     System.out.println("Topico '" + topicName + "' deletado e será recriado!");
+            //     Thread.sleep(3000);
+            // }
+
             if (topicExists(adminClient, topicName)) {
-                adminClient.deleteTopics(Collections.singletonList(topicName));
-                System.out.println("Topico '" + topicName + "' deletado e será recriado!");
-                Thread.sleep(2000);
+                System.out.println("Topico '" + topicName + "' ja existe!");
+                return;
             }
 
             NewTopic newTopic = new NewTopic(topicName, partitions, replicationFactor);
@@ -41,6 +46,7 @@ public class ProducerTest {
             e.printStackTrace();
         }
     }
+
 
     private static boolean topicExists(AdminClient adminClient, String topicName) {
         try {
@@ -74,22 +80,21 @@ public class ProducerTest {
                 // put(SASL_MECHANISM, "PLAIN");
 
                 // Pra rodar localmente com imagem do kafka no docker
-                put(BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+                put(BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,localhost:9093,localhost:9094");
 
                 put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
                 put(VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
                 put(ACKS_CONFIG, "all");
-
             }
         };
 
 
         boolean isLocal = isLocalEnvironment(props);
         if (isLocal) {
-            createTopic("topic_0", 8, (short) 1);
+            createTopic("topic_8", 8, (short) 1);
         }
 
-        final String topic = "topic_0"; // nome do topico criado no confluent cloud ou localmente
+        final String topic = "topic_8"; // nome do topico criado no confluent cloud ou localmente
 
         String[] users = { "yan", "renato", "eduardo", "vitor", "gabriel", "andrei", "marcos", "lucas" };
         String[] items = { "livro", "camisa", "caneta", "bateria", "guitarra" };

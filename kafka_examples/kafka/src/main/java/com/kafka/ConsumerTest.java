@@ -46,7 +46,8 @@ public class ConsumerTest {
                 for (ConsumerRecord<String, String> record : records){
                     String key = record.key();
                     String value = record.value();
-                    System.out.println(String.format("[Thread %-10s] Evento consumido do topico %s: chave = %-10s valor = %s", Thread.currentThread().getName(), topic, key, value));
+                    System.out.println(String.format("[Thread %-10s] Evento consumido do topico %s: chave = %-10s valor = %-10s particao = %-10s offset = %s", 
+                    Thread.currentThread().getName(), topic, key, value, record.partition(), record.offset()));
                     try {
                         Thread.sleep(1000); 
                     } catch (InterruptedException e) {
