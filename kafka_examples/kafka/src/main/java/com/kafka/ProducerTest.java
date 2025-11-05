@@ -29,8 +29,9 @@ public class ProducerTest {
         try (AdminClient adminClient = AdminClient.create(adminProps)) {
 
             if (topicExists(adminClient, topicName)) {
-                System.out.println("Topico '" + topicName + "' ja existe!");
-                return;
+                adminClient.deleteTopics(Collections.singletonList(topicName));
+                System.out.println("Topico '" + topicName + "' deletado e será recriado!");
+                Thread.sleep(2000);
             }
 
             NewTopic newTopic = new NewTopic(topicName, partitions, replicationFactor);
@@ -85,7 +86,7 @@ public class ProducerTest {
 
         boolean isLocal = isLocalEnvironment(props);
         if (isLocal) {
-            createTopic("topic_0", 3, (short) 1);
+            createTopic("topic_0", 8, (short) 1);
         }
 
         final String topic = "topic_0"; // nome do topico criado no confluent cloud ou localmente
