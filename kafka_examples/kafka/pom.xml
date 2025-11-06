@@ -42,11 +42,10 @@
             <version>${kafka.version}</version>
         </dependency>
 
-        <!-- needed if OAuth is used; otherwise this can be left out -->
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
+            <groupId>io.confluent.parallelconsumer</groupId>
+            <artifactId>parallel-consumer-core</artifactId>
+            <version>0.5.2.8</version> 
         </dependency>
     </dependencies>
 
