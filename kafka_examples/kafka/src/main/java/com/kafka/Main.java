@@ -4,10 +4,18 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Iniciando sistema Kafka com múltiplos consumers");
 
+        // Thread producerThread = new Thread(() -> {
+        //     System.out.println("Iniciando Producer");
+        //     for (int i = 0; i < 4; i++){
+        //         ProducerTest.main(new String[]{});
+        //     }   
+        // });
+
+
         Thread producerThread = new Thread(() -> {
             System.out.println("Iniciando Producer");
-            for (int i = 0; i < 4; i++){
-                ProducerTest.main(new String[]{});
+            for (int i = 0; i < 2; i++){
+                ProducerReplics.main(new String[]{});
             }   
         });
 
@@ -24,7 +32,7 @@ public class Main {
         producerThread.start();
         
         try {
-            Thread.sleep(10000);
+            Thread.sleep(30000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
