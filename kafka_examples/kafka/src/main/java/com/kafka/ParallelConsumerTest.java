@@ -2,11 +2,14 @@ package com.kafka;
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import io.confluent.parallelconsumer.ParallelConsumerOptions;
 import io.confluent.parallelconsumer.ParallelStreamProcessor;
+import io.confluent.parallelconsumer.ParallelConsumerOptions.CommitMode;
+
 import static io.confluent.parallelconsumer.ParallelConsumerOptions.ProcessingOrder.*;
 import static io.confluent.parallelconsumer.ParallelStreamProcessor.createEosStreamProcessor;
 
@@ -28,11 +31,20 @@ public class ParallelConsumerTest {
         final Properties props = new Properties() {
             {
                 put(BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,localhost:9093,localhost:9094");
-                put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-                put(VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-                put(GROUP_ID_CONFIG, "kafka-java-getting-started");
-                put(AUTO_OFFSET_RESET_CONFIG, "earliest");
-                put(ENABLE_AUTO_COMMIT_CONFIG, false);
+                
+                put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName()); //deserializa a chave 
+                put(VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName()); //deserializa a msg
+                
+                put(GROUP_ID_CONFIG, "kafka-java-getting-started"); // id do grupo de consumidores
+                put(AUTO_OFFSET_RESET_CONFIG, "earliest"); // seta onde começar a leitura se não tiver um offset salvo, acontece normalmente quando um novo grupo de consumidores lê um topico pela primeira vez
+                
+                put(ENABLE_AUTO_COMMIT_CONFIG, false); //desliga o commit automatico e como estamos usando parallel consumer ele que controla
+                put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, 2000); //setando o intervalo de commit do parallel consumer para 2 segundos | o padrão é 5 segundos
+                
+                
+                put(MAX_POLL_RECORDS_CONFIG, 10); // controla o lote por poll, processa no maximo 10 msg por vez
+                put(MAX_POLL_INTERVAL_MS_CONFIG, 30000); // tempo maximo de processamento antes de um rebalance
+                
             }
         };
 
@@ -42,7 +54,8 @@ public class ParallelConsumerTest {
 
             final ParallelConsumerOptions<String, String> options = ParallelConsumerOptions.<String, String>builder()
                     .ordering(KEY)
-                    .maxConcurrency(8)
+                    .maxConcurrency(8) //paralelism | evitar aumentar o número de threads internas (maxConcurrency) do parallel consumer mais do que (2*número de particoes) nesse caso o ideal seria 16 por conta de ter 8 particoes no topico
+                    .commitMode(CommitMode.PERIODIC_CONSUMER_ASYNCHRONOUS)
                     .consumer(consumer)
                     .build();
 

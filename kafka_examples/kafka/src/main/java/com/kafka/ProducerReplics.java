@@ -68,8 +68,8 @@ public class ProducerReplics {
                 // Conecta aos 3 brokers do docker
                 put(BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,localhost:9093,localhost:9094");
 
-                put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-                put(VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+                put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName()); //Serializa a key para bytes para enviar ao broker
+                put(VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName()); //Serializa a msg para bytes para enviar ao broker
 
                 // Configurações para replicação e confiabilidade
                 put(ACKS_CONFIG, "all"); // Espera confirmação de todos as replicas
@@ -80,13 +80,13 @@ public class ProducerReplics {
                 put(REQUEST_TIMEOUT_MS_CONFIG, 30000); // Timeout de 30 segundos
 
                 // Configurações de batch e linger para melhor performance
-                put(LINGER_MS_CONFIG, 10);
-                put(BATCH_SIZE_CONFIG, 16384);
-                put(BUFFER_MEMORY_CONFIG, 33554432);
-
+                put(LINGER_MS_CONFIG, 10); //tempo maximo que deve esperar para enviar um lote de mensagens para o broker 10ms
+                put(BATCH_SIZE_CONFIG, 16384); // tamanho maximo em bytes de cada lote de mensagens 16KB  (16.384 bytes)
+                put(BUFFER_MEMORY_CONFIG, 33554432); // memoria total disponivel para mensagens ainda não enviadas 32mb (33.554.432 bytes)
+                
                 // Configurações de reconexão
-                put(RECONNECT_BACKOFF_MS_CONFIG, 1000);
-                put(RECONNECT_BACKOFF_MAX_MS_CONFIG, 10000);
+                put(RECONNECT_BACKOFF_MS_CONFIG, 1000); // tempo de espera inicial antes de tentar reconectar a um broker depois de uma falha
+                put(RECONNECT_BACKOFF_MAX_MS_CONFIG, 10000); // tempo maximo de esepera entre as tentativas de conexao
             }
         };
 
