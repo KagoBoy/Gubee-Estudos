@@ -1,0 +1,11 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <!-- This file is empty to fallback to Maven defaults (Maven Central) -->
+  <mirrors>
+    <!-- No mirrors here, so it won't redirect to Nexus -->
+  </mirrors>
+  <profiles>
+    <!-- No "nexus" profile here -->
+  </profiles>
+</settings>
